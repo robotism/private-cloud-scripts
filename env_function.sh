@@ -17,8 +17,13 @@ if [ -n "`which apt`" ]; then
 export PM=apt
 fi
 
-export image_registry=${image_registry:-registry.cn-shanghai.aliyuncs.com}
-export image_repository=${image_repository:-labring}
+export labring_image_registry=${LABRING_REPO}
+export labring_image_registry=${labring_image_registry:-registry.cn-shanghai.aliyuncs.com}
+export labring_image_repository=${labring_image_repository:-labring}
+
+export bitnami_image_registry=${BITNAMI_REPO}
+export bitnami_image_registry=${bitnami_image_registry:-docker.io}
+export bitnami_image_repository=${bitnami_image_repository:-bitnami}
 
 export WORK_DIR=`pwd`
 

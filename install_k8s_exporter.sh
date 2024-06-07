@@ -7,9 +7,6 @@ else
 source ${REPO}/env_function.sh
 fi
 
-image_registry=${image_registry:-registry.cn-shanghai.aliyuncs.com}
-image_repository=${image_repository:-labring}
-
 
 
 # https://opentelemetry.io/docs/kubernetes/helm/collector/
@@ -46,14 +43,14 @@ install_opentelemetry_operator(){
 # https://github.com/labring-actions/cluster-image/blob/main/applications/prometheus-operator 
 install_prometheus_operator(){
   if [ ! -n "`kubectl get po -A | grep 'prometheus'`" ]; then
-  sudo sealos run ${image_registry}/${image_repository}/prometheus-operator:v0.71.2
+  sudo sealos run ${labring_image_registry}/${labring_image_repository}/prometheus-operator:v0.71.2
   fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/prometheus
 install_prometheus(){
   if [ ! -n "`kubectl get po -A | grep 'prometheus'`" ]; then
-  sudo sealos run ${image_registry}/${image_repository}/prometheus:v2.49.1 \
+  sudo sealos run ${labring_image_registry}/${labring_image_repository}/prometheus:v2.49.1 \
   -e NAME=prometheus -e NAMESPACE=prometheus -e HELM_OPTS="--set server.service.type=ClusterIP"
   fi
 }
@@ -61,7 +58,7 @@ install_prometheus(){
 # https://github.com/labring-actions/cluster-image/blob/main/applications/prometheus-node-exporter
 install_prometheus_node_exporter(){
   if [ ! -n "`kubectl get po -A | grep 'prometheus-node-exporter'`" ]; then
-  sudo sealos run ${image_registry}/${image_repository}/prometheus-node-exporter:v1.7.0\
+  sudo sealos run ${labring_image_registry}/${labring_image_repository}/prometheus-node-exporter:v1.7.0\
   -e HELM_OPTS="--set service.type=ClusterIP"
   fi
 }

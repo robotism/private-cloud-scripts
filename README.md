@@ -20,9 +20,20 @@
 # export GHPROXY=https://ghproxy.org/
 export GHPROXY=https://mirror.ghproxy.com/
 
-export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master
+export LABRING_REPO=${registry.cn-shanghai.aliyuncs.com} #
+export BITNAMI_REPO=${xxxxx.mirror.aliyuncs.com} # 请替换自己的aliyun镜像地址
 
-export ANSIBLE_VARS="export GHPROXY=${GHPROXY} && export REPO=${REPO} && "
+export SCRIPTS_REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master
+export REPO=${SCRIPTS_REPO}
+
+
+export ANSIBLE_VARS="\
+export GHPROXY=${GHPROXY} && \
+export REPO=${REPO} && \
+export SCRIPTS_REPO=${SCRIPTS_REPO} && \
+export LABRING_REPO=${LABRING_REPO} && \
+export BITNAMI_REPO=${BITNAMI_REPO} && \
+"
 
 export DOMAIN=example.com
 export TOKEN=pa44vv0rd
@@ -68,7 +79,7 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}
 
 # 批量操作
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}"
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) --install_docker true --profile ${PROFILE:-release}"
 
 ansible all -m raw -a "sleep 3s && reboot"
 
@@ -161,8 +172,7 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 # init linux  ------------------------
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
 --profile ${PROFILE:-release} \
---sources ustc \
---skip_docker true \
+--sources ustc
 "
 # 本地k8s集群使用cri不需要安装docker
 

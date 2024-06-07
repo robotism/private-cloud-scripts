@@ -46,7 +46,6 @@ fi
 profile=`getarg profile $@`
 profile=${profile:-debug}
 
-skip_docker=`getarg skip_docker $@`
 
 if [ "$profile" = "release" ]; then
 
@@ -152,11 +151,27 @@ sudo systemctl enable ntpd.service
 sudo systemctl status ntpd.service
 fi
 
+init_containerd_config=`getarg install_docker $@`
+if [ "$init_containerd_config" != "false" ]; then
+  sudo mkdir -p /etc/containerd/certs.d
+  sudo tee /etc/containerd/daemon.json <<-'EOF'
+{
+    "registry-mirrors": [
+        "https://1nj0zren.mirror.aliyuncs.com",
+        "https://mirror.ccs.tencentyun.com",
+        "https://docker.mirrors.ustc.edu.cn",
+        "http://f1361db2.m.daocloud.io",
+        "https://registry.docker-cn.com"
+    ],
+    "log-driver": "json-file",
+    "log-opts": {"max-size":"16m", "max-file":"1"}
+}
+EOF
+fi
 
-if [ "$skip_docker" != "true" ]; then
-# 安装docker
+init_docker_config=`getarg init_docker_config $@`
 
-if [ ! -n "`which docker`" ]; then
+if [ "$init_docker_config" != "false" ]; then
   sudo mkdir -p /etc/docker
   sudo tee /etc/docker/daemon.json <<-'EOF'
 {
@@ -171,6 +186,12 @@ if [ ! -n "`which docker`" ]; then
     "log-opts": {"max-size":"16m", "max-file":"1"}
 }
 EOF
+fi
+
+install_docker=`getarg install_docker $@`
+if [ "$install_docker" = "true" ]; then
+# 安装docker
+if [ ! -n "`which docker`" ]; then
   curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
   sudo systemctl start docker
   sudo systemctl enable docker

@@ -25,6 +25,9 @@ db_namespace=`getarg db_namespace $@ 2>/dev/null`
 db_namespace=${db_namespace:-db-system}
 
 helm upgrade --install wordpress bitnami/wordpress \
+--set image.registry=${bitnami_image_registry} \
+--set image.repository=${bitnami_image_repository}/wordpress \
+--set image.tag=latest \
 --set mariadb.enabled=false \
 --set persistence.enabled=false \
 --set wordpressUsername=admin \
