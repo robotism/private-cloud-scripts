@@ -20,7 +20,7 @@
 # export GHPROXY=https://ghproxy.org/
 export GHPROXY=https://mirror.ghproxy.com/
 
-export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/main
+export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master
 
 export ANSIBLE_VARS="export GHPROXY=${GHPROXY} && export REPO=${REPO} && "
 
