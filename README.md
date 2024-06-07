@@ -78,7 +78,7 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}
 
 # 批量操作
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) --install_docker true --profile ${PROFILE:-release}"
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}"
 
 ansible all -m raw -a "sleep 3s && reboot"
 
@@ -171,7 +171,8 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 # init linux  ------------------------
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
 --profile ${PROFILE:-release} \
---sources ustc
+--sources ustc \
+ --install_docker false
 "
 # 本地k8s集群使用cri不需要安装docker
 
