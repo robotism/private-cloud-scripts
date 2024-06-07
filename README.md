@@ -20,11 +20,11 @@
 # export GHPROXY=https://ghproxy.org/
 export GHPROXY=https://mirror.ghproxy.com/
 
-export LABRING_REPO=${registry.cn-shanghai.aliyuncs.com} #
-export BITNAMI_REPO=${xxxxx.mirror.aliyuncs.com} # 请替换自己的aliyun镜像地址
+export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master
+export SCRIPTS_REPO=${SCRIPTS_REPO}
 
-export SCRIPTS_REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master
-export REPO=${SCRIPTS_REPO}
+export LABRING_REPO=registry.cn-shanghai.aliyuncs.com #
+export BITNAMI_REPO=xxxxx.mirror.aliyuncs.com # 请替换自己的aliyun镜像地址
 
 
 export ANSIBLE_VARS="\
