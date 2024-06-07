@@ -24,8 +24,7 @@ export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-s
 export SCRIPTS_REPO=${SCRIPTS_REPO}
 
 export LABRING_REPO=registry.cn-shanghai.aliyuncs.com #
-export BITNAMI_REPO=xxxxx.mirror.aliyuncs.com # 请替换自己的aliyun镜像地址
-
+export BITNAMI_REPO=xxxx.mirror.aliyuncs.com # 请替换自己的aliyun镜像地址
 
 export ANSIBLE_VARS="\
 export GHPROXY=${GHPROXY} && \
