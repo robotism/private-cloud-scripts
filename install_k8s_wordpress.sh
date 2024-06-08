@@ -32,6 +32,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
 --set image.tag=latest \
+--set wordpressScheme=https \
 --set mariadb.enabled=false \
 --set persistence.enabled=false \
 --set wordpressUsername=admin \

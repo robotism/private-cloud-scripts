@@ -13,6 +13,8 @@ password=`getarg password $@  2>/dev/null`
 password=${password:-"pa44vv0rd"}
 storage_class=`getarg storage_class $@  2>/dev/null`
 storage_class=${storage_class:-""}
+ingress_class=`getarg ingress_class $@ 2>/dev/null`
+ingress_class=${ingress_class:-higress}
 
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -43,7 +45,17 @@ helm upgrade --install rabbitmq bitnami/rabbitmq \
   --set extraEnvVars[0].value=debug \
   -n ${namespace} --create-namespace
 # helm uninstall rabbitmq -n ${namespace}
-
+rabbitmq_route_rule=`getarg rabbitmq_route_rule $@`
+rabbitmq_route_rule=${rabbitmq_route_rule:-localhost}
+srv_name=$(kubectl get service -n ${namespace} | grep rabbitmq | grep -v 'headless' | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[?(@.name=='http-stats')].port}")
+install_ingress_rule \
+--name rabbitmq \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${rabbitmq_route_rule}
 
 ## install rocketmq
 # https://github.com/itboon/rocketmq-helm
