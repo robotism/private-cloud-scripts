@@ -24,6 +24,10 @@ wordpress_route_rule=${wordpress_route_rule:-'wordpress.localhost'}
 db_namespace=`getarg db_namespace $@ 2>/dev/null`
 db_namespace=${db_namespace:-db-system}
 
+#
+# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
+
 helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
