@@ -98,10 +98,16 @@ ansible all -m raw -a "hostname && docker ps"
 
 
 ```bash
-ACME_CRON_SH=/etc/
-sudo tee /etc/docker/daemon.json <<-'EOF'
-export DP_ID=xxxxx
-export DP_KEY=xxxxxxxxxxxxxxxxxxx
+
+ACME_CRON_DIR=${DATA}/cron
+mkdir -p $ACME_CRON_DIR
+ACME_CRON_SH=$ACME_CRON_DIR/acme.cron.sh
+ACME_CRON_LOG=$ACME_CRON_DIR/acme.cron.log
+cat << EOF > $ACME_CRON_SH
+echo "####################################"
+echo "acme.sh exec @ $(date +%F) $(date +%T)" >> $ACME_CRON_LOG
+export DP_ID=${DP_ID:-xxxxxx}               # 请按需替换
+export DP_KEY=${DP_KEY:-xxxxxxxxxxxxxxxx}   # 请按需替换
 bash <(curl -s ${REPO}/install_docker_acme.sh) \
 --output ${TEMP}/acme.sh \
 --dns dns_dp \
@@ -113,8 +119,24 @@ bash <(curl -s ${REPO}/install_docker_acme.sh) \
 ansible all -m raw -a "rm -rf ${DATA}/acme.sh"
 ansible all -m copy -a "src=${TEMP}/acme.sh dest=${DATA} force=yes"
 ansible all -m raw -a "ls ${DATA}/acme.sh"
+ansible all -m raw -a "docker restart traefik 2>/dev/null"
 EOF
+chmod +x $ACME_CRON_SH
+echo ""
+echo "--------------------------------------------------------------------------"
+ls $ACME_CRON_DIR
+echo "--------------------------------------------------------------------------"
+cat $ACME_CRON_SH
+echo "--------------------------------------------------------------------------"
+echo ""
+bash $ACME_CRON_SH
+ansible localhost -m cron -a "name='acme.cron.sh' state=absent"
+ansible localhost -m cron -a "name='acme.cron.sh' job='bash $ACME_CRON_SH >> $ACME_CRON_LOG' month=*/1 day=1 hour=3 minute=0"
+ansible localhost -m raw -a "crontab -l"
 
+# ansible localhost -m cron -a "name='test' state=absent"
+# ansible localhost -m cron -a "name='test' job='echo testing >> ~/test.log' minute=*/1" && tail -f ~/test.log
+# 
 ```
 
 ### 一键部署Traefik
@@ -133,7 +155,6 @@ bash <(curl -s ${REPO}/install_docker_traefik.sh) \
 --dashboard_password ${TOKEN} \
 "
 ansible all -m raw -a "docker logs -n 10 traefik"
-
 
 ```
 

@@ -104,7 +104,6 @@ if [ ! -f "/usr/bin/crontab" ];then
 fi
 
 
-
 # swap off
 if [ ! -n "`cat /etc/sysctl.conf | grep 'vm.swappiness' | grep '0'`" ]; then
 echo "vm.swappiness = 0">> /etc/sysctl.conf
