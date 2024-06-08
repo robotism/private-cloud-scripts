@@ -9,6 +9,9 @@
 # fi
 #############################################################
 
+[ "$debug" == "true" -o "$debug" == "yes" ] && set -x
+[ "$DEBUG" == "true" -o "$DEBUG" == "yes" ] && set -x
+
 if [ -n "`which yum`" ]; then
 export PM=yum
 fi

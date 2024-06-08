@@ -1,7 +1,5 @@
 #/bin/bash -e
 
-[ "$debug" == "true" -o "$debug" == "yes" ] && set -x
-
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
 source <(curl -s ${REPO}/env_function.sh) 
@@ -185,6 +183,11 @@ do
     [ ! -d "$hosts_path" ] && mkdir -p ${hosts_path}
     content > $hosts_path/hosts.toml
 done
+
+sudo tee $config_file -a <<-'EOF'
+  [plugins.cri.registry.mirrors."docker.io"]
+    endpoint = ["https://fogjl973.mirror.aliyuncs.com", "https://registry-1.docker.io"]
+EOF
 systemctl restart containerd
 fi
 
