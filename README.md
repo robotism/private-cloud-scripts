@@ -16,6 +16,9 @@
 
 ```bash
 
+export TEMP=/opt/tmp
+export DATA=/opt/data
+
 # 代理
 # export GHPROXY=https://ghproxy.org/
 export GHPROXY=https://mirror.ghproxy.com/
@@ -27,6 +30,8 @@ export LABRING_REPO=registry.cn-shanghai.aliyuncs.com #
 export BITNAMI_REPO=docker.io # 请替换自己的aliyun镜像地址
 
 export ANSIBLE_VARS="\
+export TEMP=${TEMP} && \
+export DATA=${DATA} && \
 export GHPROXY=${GHPROXY} && \
 export REPO=${REPO} && \
 export SCRIPTS_REPO=${SCRIPTS_REPO} && \
@@ -36,9 +41,6 @@ export BITNAMI_REPO=${BITNAMI_REPO} && \
 
 export DOMAIN=example.com
 export TOKEN=pa44vv0rd
-
-export TEMP=/opt/tmp
-export DATA=/opt/data
 
 # 云主机
 export CLOUD_IPS=xxx,xxx # WAN
@@ -85,8 +87,8 @@ ansible all -m raw -a "sleep 3s && reboot"
 ansible all -m raw -a "hostname && docker ps"
 
 # test doamin->ip->nginx:80
-#ansible all -m raw -a 'docker run -dit -p 80:80 --name=nginx nginx'
-#ansible all -m raw -a 'docker rm -f $(docker ps -aq)'
+# ansible all -m raw -a 'docker run -dit -p 80:80 --name=nginx nginx'
+# ansible all -m raw -a 'docker rm -f $(docker ps -aq)'
 
 ```
 
@@ -96,10 +98,10 @@ ansible all -m raw -a "hostname && docker ps"
 
 
 ```bash
-
+ACME_CRON_SH=/etc/
+sudo tee /etc/docker/daemon.json <<-'EOF'
 export DP_ID=xxxxx
 export DP_KEY=xxxxxxxxxxxxxxxxxxx
-
 bash <(curl -s ${REPO}/install_docker_acme.sh) \
 --output ${TEMP}/acme.sh \
 --dns dns_dp \
@@ -111,6 +113,7 @@ bash <(curl -s ${REPO}/install_docker_acme.sh) \
 ansible all -m raw -a "rm -rf ${DATA}/acme.sh"
 ansible all -m copy -a "src=${TEMP}/acme.sh dest=${DATA} force=yes"
 ansible all -m raw -a "ls ${DATA}/acme.sh"
+EOF
 
 ```
 

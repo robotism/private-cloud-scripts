@@ -75,6 +75,10 @@ fi
 # init tools
 
 
+if [ ! -f "/usr/bin/vim" ];then
+  apt install -y vim
+fi
+
 if [ ! -f "/usr/bin/git" ];then
   apt install -y git
 fi
@@ -95,10 +99,9 @@ if [ ! -f "/usr/bin/curl" ];then
   apt install -y curl
 fi
 
-if [ ! -f "/usr/bin/vim" ];then
-  apt install -y vim
+if [ ! -f "/usr/bin/crontab" ];then
+  apt install -y cron
 fi
-
 
 
 
@@ -111,7 +114,7 @@ fi
 
 
 # firewalld off
-sudo systemctl stop firewalld.service
+sudo systemctl stop firewalld.service 
 sudo systemctl disable firewalld.service
 sudo systemctl status firewalld.service
 
@@ -154,7 +157,10 @@ fi
 
 init_containerd_config=`getarg init_docker_config $@`
 if [ "$init_containerd_config" != "false" ]; then
+CONTAINERD_MIRRORS_SH=${TEMP:-.}/container_mirrors.sh
+sudo tee $CONTAINERD_MIRRORS_SH <<-'EOF'
 export PS4='\[\e[35m\]+ $(basename $0):${FUNCNAME}:$LINENO: \[\e[0m\]'
+[ "$debug" == "true" -o "$debug" == "yes" ] && set -x
 config_file="/etc/containerd/config.toml"
 config_path='/etc/containerd/certs.d'
 if [ ! -f "${config_file}" ];then
@@ -178,7 +184,11 @@ do
     [ ! -d "$hosts_path" ] && mkdir -p ${hosts_path}
     content > $hosts_path/hosts.toml
 done
+ls $config_path
 systemctl restart containerd
+EOF
+debug=true bash $CONTAINERD_MIRRORS_SH
+rm -f $CONTAINERD_MIRRORS_SH
 fi
 
 
