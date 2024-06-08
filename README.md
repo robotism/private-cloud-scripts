@@ -274,14 +274,6 @@ bash <(curl -s ${REPO}/install_k8s_ide.sh) \
 --password ${TOKEN}
 ```
 
-### 一键部署 WordPress
-
-```bash
-bash <(curl -s ${REPO}/install_k8s_wordpress.sh) \
---ingress_class higress \
---wordpress_route_rule ${DOMAIN},www.${DOMAIN} \
---password ${TOKEN}
-```
 
 ### 一键部署 Halo
 

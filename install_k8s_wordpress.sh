@@ -32,11 +32,12 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
 --set image.tag=latest \
---set wordpressScheme=https \
+--set replicaCount=1 \
 --set mariadb.enabled=false \
 --set persistence.enabled=false \
 --set wordpressUsername=admin \
 --set wordpressPassword=${password} \
+--set wordpressScheme=http \
 --set externalDatabase.host=mysql-primary.${db_namespace}.svc \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \

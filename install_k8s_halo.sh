@@ -34,7 +34,7 @@ helm upgrade --install halo halo/halo \
 --set externalDatabase.port=3306 \
 --set externalDatabase.user=halo \
 --set externalDatabase.password=${password} \
---set externalDatabase.database=halo
+--set externalDatabase.database=halo \
 -n ${namespace} --create-namespace
 
 
