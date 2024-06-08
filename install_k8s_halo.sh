@@ -32,7 +32,7 @@ helm upgrade --install halo halo/halo \
 --set externalDatabase.platform=mysql \
 --set externalDatabase.host=mysql-primary.${db_namespace}.svc \
 --set externalDatabase.port=3306 \
---set externalDatabase.user=halo \
+--set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
 --set externalDatabase.database=halo \
 -n ${namespace} --create-namespace
