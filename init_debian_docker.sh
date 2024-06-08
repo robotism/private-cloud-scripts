@@ -1,5 +1,7 @@
 #/bin/bash -e
 
+[ "$debug" == "true" -o "$debug" == "yes" ] && set -x
+
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
 source <(curl -s ${REPO}/env_function.sh) 
@@ -155,7 +157,6 @@ fi
 init_containerd_config=`getarg init_docker_config $@`
 if [ "$init_containerd_config" != "false" ]; then
 export PS4='\[\e[35m\]+ $(basename $0):${FUNCNAME}:$LINENO: \[\e[0m\]'
-[ "$debug" == "true" -o "$debug" == "yes" ] && set -x
  
 config_file="/etc/containerd/config.toml"
 config_path='/etc/containerd/certs.d'
