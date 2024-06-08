@@ -26,6 +26,10 @@ db_namespace=${db_namespace:-db-system}
 
 helm repo add halo https://halo-sigs.github.io/charts/
 
+#
+# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS halo;show databases;'
+
 helm upgrade --install halo halo/halo \
 --set mysql.enabled=false \
 --set postgresql.enabled=false \
