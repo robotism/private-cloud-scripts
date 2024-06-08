@@ -87,7 +87,7 @@ helm upgrade --install elasticsearch bitnami/elasticsearch \
 
 ## install victoriametrics
 # https://github.com/VictoriaMetrics/helm-charts
-helm repo add victoriametrics https://victoriametrics.github.io/helm-charts/
+helm repo add victoriametrics ${GHPROXY}https://victoriametrics.github.io/helm-charts/
 helm upgrade --install victoria-metrics-cluster vm/victoria-metrics-cluster \
   --set persistentVolume.storageClass=${storage_class} \
   --set vmselect.fullnameOverride=victoria-metrics-cluster-vmselect \

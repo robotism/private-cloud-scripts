@@ -172,7 +172,7 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
- --install_docker false
+ --install_docker false \
 "
 # 本地k8s集群使用cri不需要安装docker
 
