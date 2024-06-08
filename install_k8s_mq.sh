@@ -47,8 +47,8 @@ helm upgrade --install rabbitmq bitnami/rabbitmq \
 
 ## install rocketmq
 # https://github.com/itboon/rocketmq-helm
-helm repo add rocketmq-repo https://helm-charts.itboon.top/rocketmq
-helm upgrade --install rocketmq rocketmq-repo/rocketmq-cluster \
+helm repo add rocketmq https://helm-charts.itboon.top/rocketmq
+helm upgrade --install rocketmq rocketmq/rocketmq-cluster \
   --set broker.size.master="1" \
   -n ${namespace} --create-namespace
 # helm uninstall rocketmq -n ${namespace}
