@@ -187,7 +187,7 @@ done
 ls $config_path
 systemctl restart containerd
 EOF
-debug=true bash $CONTAINERD_MIRRORS_SH
+bash $CONTAINERD_MIRRORS_SH
 rm -f $CONTAINERD_MIRRORS_SH
 fi
 
