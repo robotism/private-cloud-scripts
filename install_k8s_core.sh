@@ -27,7 +27,7 @@ install_k8s(){
   local masters=`getarg masters $@`
   local nodes=`getarg nodes $@`
   if [ ! -n "`which kubectl`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/kubernetes:v1.27.13  --masters ${masters:-""} -p ${password}
+  sudo sealos run ${labring_image_registry}/${labring_image_repository}/kubernetes:v1.27.14  --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
