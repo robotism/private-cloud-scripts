@@ -36,7 +36,6 @@ helm upgrade --install halo halo/halo \
 --set image.tag=2 \
 --set mysql.enabled=false \
 --set postgresql.enabled=false \
---set haloScheme=https \
 --set haloUsername=admin \
 --set haloPassword=${password} \
 --set externalDatabase.platform=mysql \
