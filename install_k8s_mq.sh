@@ -34,6 +34,7 @@ helm upgrade --install kafka bitnami/kafka \
 # https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq/#installing-the-chart
 helm upgrade --install rabbitmq bitnami/rabbitmq \
   --set global.storageClass=${storage_class} \
+  --set image.debug=true \
   --set auth.password=${password} \
   --set auth.erlangCookie=ERLANG_COOKIE \
   --set clustering.forceBoot=true \

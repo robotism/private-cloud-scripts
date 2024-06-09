@@ -23,6 +23,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
 helm upgrade --install mysql bitnami/mysql \
   --set global.storageClass=${storage_class} \
+  --set image.debug=true \
   --set auth.rootPassword=${password} \
   --set architecture=replication \
   -n ${namespace} --create-namespace
