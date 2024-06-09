@@ -27,7 +27,7 @@ install_k8s(){
   local masters=`getarg masters $@`
   local nodes=`getarg nodes $@`
   if [ ! -n "`which kubectl`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/kubernetes:v1.27.14  --masters ${masters:-""} -p ${password}
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubernetes:v1.27.14  --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
@@ -40,7 +40,7 @@ install_k8s(){
 isntall_helm(){
   if [ ! -n "`which helm`" ]; then
   # https://github.com/labring-actions/cluster-image/blob/main/applications/helm
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/helm:v3.14.1
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/helm:v3.14.1
   fi
 }
 
@@ -64,16 +64,14 @@ install_gateway_api(){
 
 # c
 install_cilium(){
-  if [ ! -n "`which cilium`" ]; then
   kubectl -n kube-system delete ds kube-proxy
   kubectl -n kube-system delete cm kube-proxy
   # Run on each node with root permissions:
   # iptables-save | grep -v KUBE | iptables-restore
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/cilium:v1.15.5
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cilium:v1.15.5
 
   cilium status --wait
   cilium status 
-  fi
 }
 
 upgrade_cilium(){
@@ -137,21 +135,21 @@ EOF
 # https://github.com/labring-actions/cluster-image/blob/main/applications/openebs
 install_openebs(){
   if [ ! -n "`kubectl get po -A | grep 'openebs'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/openebs:v3.10.0
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/openebs:v3.10.0
   fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/longhorn
 install_longhorn(){
   if [ ! -n "`kubectl get po -A | grep 'longhorn'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/longhorn:v1.6.1
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/longhorn:v1.6.1
   fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/cert-manager
 install_cert_manager(){
   if [ ! -n "`kubectl get po -A | grep 'cert-manager'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.14.5
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.14.5
   kubectl -n cert-manager wait --for=condition=Ready pods --all
   fi
 }
@@ -164,7 +162,7 @@ install_cert_manager(){
 install_istio(){
   local profile=`getarg profile $@`
   if [ ! -n "`kubectl get po -A | grep 'istio'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/istio:v1.20.1 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/istio:v1.20.1 \
       -e ISTIOCTL_OPTS="--set profile=${profile:-minimal} -y"
   kubectl -n istio-system wait --for=condition=Ready pods --all
   kubectl get gatewayclass
@@ -179,14 +177,14 @@ install_istio(){
 # https://github.com/labring-actions/cluster-image/blob/main/applications/metrics-server
 install_metrics_server(){
   if [ ! -n "`kubectl get po -A | grep 'metrics-server'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/metrics-server:v0.6.4
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/metrics-server:v0.6.4
   fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kube-state-metrics
 install_kube_state_metrics(){
   if [ ! -n "`kubectl get po -A | grep 'kube-state-metrics'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/kube-state-metrics:v2.4.2
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kube-state-metrics:v2.4.2
   fi
 }
 
@@ -195,7 +193,7 @@ install_kube_state_metrics(){
 install_ingress_nginx(){
   local host=`getarg host $@`
   if [ ! -n "`kubectl get po -A | grep 'ingress-nginx'`" ]; then
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.9.4 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.9.4 \
   -e HELM_OPTS="--set controller.hostNetwork=${host:-true} --set controller.kind=DaemonSet --set controller.service.type=NodePort"
   # 使用宿主机网络, DaemonSet保证每个节点都可以接管流量, 使用NodePort暴露端口
   # 至此可以应用可以使用 ingressClass=ingress 暴露服务; 值得注意的是, 如果服务不可用,可能LoadBalancer不会分配ExternalIP
@@ -219,7 +217,7 @@ install_higress(){
   echo "istio=${istio:-true}"
   echo "gateway=${gateway:-true}"
 
-  sudo sealos run ${labring_image_registry}/${labring_image_repository}/higress:v1.3.6 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v1.3.6 \
   -e HELM_OPTS=" \
   --set global.local=${local:-true} \
   --set global.ingressClass=higress \
