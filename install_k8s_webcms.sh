@@ -28,11 +28,16 @@ web_provider=${web_provider:-ghost}
 web_route_rule=`getarg web_route_rule $@`
 web_route_rule=${web_route_rule:-'www.localhost'}
 
-if [ "$web_provider" = "halo" ]; then
 #
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS halo;show databases;'
-# 
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS ghost;show databases;'
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
+
+
+
+if [ "$web_provider" = "halo" ]; then
+#
 # https://github.com/halo-sigs/charts/blob/main/charts/halo/values.yaml
 helm upgrade --install halo halo/halo \
 --set image.tag=2 \
@@ -96,9 +101,6 @@ fi
 
 
 if [ "$web_provider" = "wordpres" ]; then
-#
-# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
 # 
 # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
 helm upgrade --install wordpress bitnami/wordpress \
