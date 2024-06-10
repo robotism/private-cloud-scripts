@@ -71,6 +71,7 @@ helm upgrade --install ghost bitnami/ghost \
 --set postgresql.enabled=false \
 --set ghostUsername=admin \
 --set ghostPassword=${password} \
+--set service.type=ClusterIP \
 --set externalDatabase.platform=mysql \
 --set externalDatabase.host=mysql-primary.${db_namespace}.svc \
 --set externalDatabase.port=3306 \
