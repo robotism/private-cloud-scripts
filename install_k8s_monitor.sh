@@ -40,6 +40,7 @@ if [ ! -f "$es_password" ]; then
 es_password=$(kubectl get secret elasticsearch -n ${es_namespace} -o jsonpath='{.data.elasticsearch-password}' | base64 --decode)
 fi
 
+kubectl create namespace ${namespace}
 kubectl delete secret kibana-admin -n ${namespace} 2>/dev/null
 kubectl create secret generic kibana-admin -n ${namespace} \
   --from-literal=kibana-password=${es_password} \

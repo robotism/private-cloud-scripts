@@ -290,3 +290,13 @@ bash <(curl -s ${REPO}/install_k8s_halo.sh) \
 --halo_route_rule ${DOMAIN},www.${DOMAIN} \
 --password ${TOKEN}
 ```
+
+
+### 一键部署 middleware
+
+```bash
+bash <(curl -s ${REPO}/install_ms_middleware.sh) \
+--ingress_class higress \
+--dtm_route_rule dtm.${DOMAIN} \
+--password ${TOKEN}
+```
