@@ -27,7 +27,8 @@ db_namespace=${db_namespace:-db-system}
 #
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
-
+# 
+# https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
 helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
@@ -38,6 +39,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set wordpressUsername=admin \
 --set wordpressPassword=${password} \
 --set wordpressScheme=http \
+--set service.type=CluserIP \
 --set externalDatabase.host=mysql-primary.${db_namespace}.svc \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
