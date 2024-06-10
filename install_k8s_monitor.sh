@@ -154,7 +154,7 @@ helm upgrade --install skywalking chart/skywalking  \
   --set satellite.image.tag=v0.4.0 \
   -n ${namespace} --create-namespace
 cd $WORK_DIR
-rm -rf code-server
+rm -rf skywalking-helm
 # helm uninstall skywalking -n ${namespace} 
 skywalking_route_rule=`getarg skywalking_route_rule $@ 2>/dev/null`
 skywalking_route_rule=${skywalking_route_rule:-'skywalking.localhost'}
