@@ -66,7 +66,7 @@ fi
 if [ "$web_provider" = "ghost" ]; then
 # https://github.com/bitnami/charts/blob/main/bitnami/ghost/README.md
 helm upgrade --install ghost bitnami/ghost \
---set image.tag=2 \
+--set image.tag=latest \
 --set mysql.enabled=false \
 --set postgresql.enabled=false \
 --set ghostUsername=admin \
