@@ -169,12 +169,13 @@ ansible all -m raw -a "${ANSIBLE_VARS} \
 bash <(curl -s ${REPO}/install_docker_frps.sh) \
 --datadir ${DATA}/frp \
 --http_route_rule 'HostRegexp(\`.*\`)&&!HostRegexp(\`^(traefik|frps|tcp)\`)' \
---tcp_route_rule 'HostSNI(\`tcp-*.${DOMAIN}\`)' \
+--tcp_route_rule 'HostSNI(\`tcp-*\`)' \
 --dashboard_route_rule 'Host(\`frps.${DOMAIN}\`)' \
 --dashboard_user frps \
 --token ${TOKEN} \
 "
 ansible all -m raw -a "docker logs -n 10 frps"
+ansible all -m raw -a "docker logs -n 10 traefik"
 
 ```
 
@@ -283,22 +284,14 @@ bash <(curl -s ${REPO}/install_k8s_ide.sh) \
 ```
 
 
-### 一键部署 WordPress
 
-```bash
-bash <(curl -s ${REPO}/install_k8s_wordpress.sh) \
---ingress_class higress \
---wordpress_route_rule ${DOMAIN},www.${DOMAIN} \
---password ${TOKEN}
-```
-
-
-### 一键部署 Halo
+### 一键部署 WebCMS
 
 ```bash
 bash <(curl -s ${REPO}/install_k8s_halo.sh) \
 --ingress_class higress \
---halo_route_rule ${DOMAIN},www.${DOMAIN} \
+--web_provider ghost \
+--web_route_rule ${DOMAIN},www.${DOMAIN} \
 --password ${TOKEN}
 ```
 
