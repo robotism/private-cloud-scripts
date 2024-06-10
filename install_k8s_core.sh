@@ -38,10 +38,8 @@ install_k8s(){
 # https://github.com/labring-actions/cluster-image-docs/blob/main/docs/aliyun-shanghai/apps.md
 
 isntall_helm(){
-  if [ ! -n "`which helm`" ]; then
   # https://github.com/labring-actions/cluster-image/blob/main/applications/helm
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/helm:v3.14.1
-  fi
 }
 
 

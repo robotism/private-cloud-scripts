@@ -40,6 +40,8 @@ helm upgrade --install rabbitmq bitnami/rabbitmq \
   --set clustering.forceBoot=true \
   --set replicaCount=1 \
   --set podManagementPolicy=Parallel \
+  --set serviceAccount.create=true \
+  --set serviceAccount.automountServiceAccountToken=true \
   --set plugins="rabbitmq_management rabbitmq_event_exchange rabbitmq_peer_discovery_k8s" \
   --set extraPlugins="" \
   --set extraEnvVars[0].name=LOG_LEVEL \

@@ -70,6 +70,7 @@ bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
 ansible all -m raw -a "mkdir -p ${TEMP}"
 ansible all -m raw -a "mkdir -p ${DATA}"
 
+
 ```
 
 ### 一键初始化debian和docker环境
@@ -77,7 +78,7 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 ```bash
 
 # 单独操作
-bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}
+# bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}
 
 # 批量操作
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}"
@@ -183,6 +184,12 @@ bash <(curl -s ${REPO}/install_docker_frps.sh) \
 ### 一键初始化系统
 
 ```bash
+# init master ------------------------
+bash <(curl -s ${REPO}/init_debian_docker.sh) \
+--profile ${PROFILE:-release} \
+--sources ustc \
+--install_docker false
+
 # init ansible  ------------------------
 bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
 --hostname k8s-node- \
@@ -192,7 +199,7 @@ bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
 ansible all -m raw -a "mkdir -p ${TEMP}"
 ansible all -m raw -a "mkdir -p ${DATA}"
 
-# init linux  ------------------------
+# init all  ------------------------
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
