@@ -58,3 +58,5 @@ install_ingress_rule \
 --service_name $srv_name \
 --service_port $src_port \
 --domain ${wordpress_route_rule}
+
+# 如果出现 content mixed 问题 可以安装 ssl insecure content fixer 插件
