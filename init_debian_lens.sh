@@ -3,9 +3,10 @@
 DATA=${DATA:-/opt/data}
 
 # install lens ------------------------
+# https://k8slens.dev/download
 if [ ! -f "${DATA}/Lens/Lens.AppImage" ]; then 
 mkdir -p ${DATA}/Lens
-wget -t 0 -c https://downloads.k8slens.dev/ide/Lens-2024.4.230844-latest.x86_64.AppImage -O ${DATA}/Lens/Lens.AppImage
+wget -t 0 -c https://downloads.k8slens.dev/ide/Lens-2024.5.271333-latest.x86_64.AppImage -O ${DATA}/Lens/Lens.AppImage
 chmod u+x  ${DATA}/Lens/Lens.AppImage
 fi
 

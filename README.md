@@ -169,7 +169,7 @@ ansible all -m raw -a "${ANSIBLE_VARS} \
 bash <(curl -s ${REPO}/install_docker_frps.sh) \
 --datadir ${DATA}/frp \
 --http_route_rule 'HostRegexp(\`.*\`)&&!HostRegexp(\`^(traefik|frps|tcp)\`)' \
---tcp_route_rule 'HostSNI(\`tcp-*\`)' \
+--tcp_route_rule 'HostSNIRegexp(\`^tcp-.*.${DOMAIN}\`)' \
 --dashboard_route_rule 'Host(\`frps.${DOMAIN}\`)' \
 --dashboard_user frps \
 --token ${TOKEN} \

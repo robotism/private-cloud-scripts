@@ -91,7 +91,7 @@ EOF
   cat ${tmpdir}/frpc.toml
   echo "------------------------------------------------------"
 
-  kubectl delete secret ${name}.toml -n ${namepsace}
+  kubectl delete secret ${name}.toml -n ${namepsace} 2>/dev/null
   kubectl create secret generic ${name}.toml -n ${namepsace} --from-file=${tmpdir}/frpc.toml
 
 cat << EOF > ${tmpdir}/${FRPC_YAML}
