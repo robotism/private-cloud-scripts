@@ -288,7 +288,7 @@ bash <(curl -s ${REPO}/install_k8s_ide.sh) \
 ### 一键部署 WebCMS
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_halo.sh) \
+bash <(curl -s ${REPO}/install_k8s_webcms.sh) \
 --ingress_class higress \
 --web_provider ghost \
 --web_route_rule ${DOMAIN},www.${DOMAIN} \
