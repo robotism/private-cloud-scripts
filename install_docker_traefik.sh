@@ -45,7 +45,7 @@ dashboard_route_rule=${dashboard_route_rule:-'Host(`traefik.localhost`)'}
 dashboard_user=`getarg dashboard_user $@`
 dashboard_user=${dashboard_user:-traefik}
 dashboard_password=`getarg dashboard_password $@`
-dashboard_password=${dashboard_password:-pa44vv0rd}
+dashboard_password=${dashboard_password:-Pa44VV0rd14VVrOng}
 
 echo "route_rule   => $route_rule"
 echo "dashboard_route_rule => $dashboard_route_rule"

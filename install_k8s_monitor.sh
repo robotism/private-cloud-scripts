@@ -16,7 +16,7 @@ namespace=${namespace:-"monitor-system"}
 storage_class=`getarg storage_class $@  2>/dev/null`
 storage_class=${storage_class:-""}
 password=`getarg password $@  2>/dev/null`
-password=${password:-"pa44vv0rd"}
+password=${password:-"Pa44VV0rd14VVrOng"}
 ingress_class=`getarg ingress_class $@ 2>/dev/null`
 ingress_class=${ingress_class:-higress}
 

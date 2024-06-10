@@ -38,7 +38,7 @@ tcp_route_rule=${tcp_route_rule:-"tcp-*"}
 
 
 token=$(getarg token $@)
-token=${token:-pa44vv0rd}
+token=${token:-Pa44VV0rd14VVrOng}
 
 if [ ! -n "$bind_ips" ]; then
 echo "missing bind_ips"

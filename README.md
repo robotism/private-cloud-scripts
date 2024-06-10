@@ -40,7 +40,7 @@ export BITNAMI_REPO=${BITNAMI_REPO} && \
 "
 
 export DOMAIN=example.com
-export TOKEN=pa44vv0rd
+export TOKEN=Pa44VV0rd14VVrOng
 
 # 云主机
 export CLOUD_IPS=xxx,xxx # WAN

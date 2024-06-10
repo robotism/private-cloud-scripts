@@ -18,7 +18,7 @@ tls=$(getarg tls $@)
 tls=${tls:-true}
 
 token=$(getarg token $@)
-token=${token:-pa44vv0rd}
+token=${token:-Pa44VV0rd14VVrOng}
 
 http_route_rule=$(getarg http_route_rule $@)
 http_route_rule=${http_route_rule:-Host\(\`localhost\`\)}
