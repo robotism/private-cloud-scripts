@@ -52,8 +52,7 @@ es_password=${es_password:-${password}}
 #
 dtm_route_rule=`getarg dtm_route_rule $@ 2>/dev/null`
 dtm_route_rule=${dtm_route_rule:-'dtm.localhost'}
-# git clone https://github.com/dtm-labs/dtm
-git clone https://gitee.com/mirrors/dtm
+git clone ${GHPROXY}https://github.com/dtm-labs/dtm 2>/dev/null
 cd dtm
 echo "
 configuration: |-

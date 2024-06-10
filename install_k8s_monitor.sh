@@ -9,6 +9,7 @@ fi
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
+WORK_DIR=${WORK_DIR:-`pwd`}
 
 namespace=`getarg namespace $@ 2>/dev/null`
 namespace=${namespace:-"monitor-system"}
@@ -69,41 +70,6 @@ install_ingress_rule \
 --domain ${kibana_route_rule}
 
 
-## install skywalking
-# https://github.com/apache/skywalking-helm
-# SW_ES_USER,SW_ES_PASSWORD,SW_STORAGE_ES_HTTP_PROTOCOL,SW_SW_STORAGE_ES_SSL_JKS_PATH,SW_SW_STORAGE_ES_SSL_JKS_PASS
-helm upgrade --install skywalking oci://registry-1.docker.io/apache/skywalking-helm \
-  --version 4.5.0 \
-  -n ${namespace} --create-namespace \
-  --set ui.image.tag=10.0.0 \
-  --set oap.image.tag=10.0.0 \
-  --set oap.replicas=1 \
-  --set oap.storageType=elasticsearch \
-  --set elasticsearch.enabled=false \
-  --set elasticsearch.replicas=1 \
-  --set elasticsearch.config.protocol=${es_protocol:-http} \
-  --set elasticsearch.config.host=${es_host:-elasticsearch.${es_namespace}.svc} \
-  --set elasticsearch.config.user="${es_user:-elastic}" \
-  --set elasticsearch.config.password="${es_password}" \
-  --set elasticsearch.persistence.enabled=true \
-  --set elasticsearch.antiAffinity="" \
-  --set elasticsearch.antiAffinityTopologyKey="" \
-  --set satellite.enabled=true \
-  --set satellite.image.tag=v0.4.0
-# helm uninstall skywalking -n ${namespace} 
-skywalking_route_rule=`getarg skywalking_route_rule $@ 2>/dev/null`
-skywalking_route_rule=${skywalking_route_rule:-'skywalking.localhost'}
-srv_name=$(kubectl get service -n ${namespace} | grep skywalking | grep ui | awk '{print $1}')
-src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
-install_ingress_rule \
---name skywalking \
---namespace ${namespace} \
---ingress_class ${ingress_class} \
---service_name $srv_name \
---service_port $src_port \
---domain ${skywalking_route_rule}
-
-
 
 ## install prometheus
 # https://github.com/bitnami/charts/tree/main/bitnami/prometheus/#installing-the-chart
@@ -161,6 +127,48 @@ install_ingress_rule \
 --service_name $srv_name \
 --service_port $src_port \
 --domain ${grafana_route_rule}
+
+
+## install skywalking
+# https://github.com/apache/skywalking-helm
+# SW_ES_USER,SW_ES_PASSWORD,SW_STORAGE_ES_HTTP_PROTOCOL,SW_SW_STORAGE_ES_SSL_JKS_PATH,SW_SW_STORAGE_ES_SSL_JKS_PASS
+
+git clone ${GHPROXY}https://github.com/apache/skywalking-helm 2>/dev/null
+cd skywalking-helm
+helm upgrade --install skywalking chart/skywalking  \
+  --version 4.5.0 \
+  --set ui.image.tag=10.0.0 \
+  --set oap.image.tag=10.0.0 \
+  --set oap.replicas=1 \
+  --set oap.storageType=elasticsearch \
+  --set elasticsearch.enabled=false \
+  --set elasticsearch.replicas=1 \
+  --set elasticsearch.config.protocol=${es_protocol:-http} \
+  --set elasticsearch.config.host=${es_host:-elasticsearch.${es_namespace}.svc} \
+  --set elasticsearch.config.user="${es_user:-elastic}" \
+  --set elasticsearch.config.password="${es_password}" \
+  --set elasticsearch.persistence.enabled=true \
+  --set elasticsearch.antiAffinity="" \
+  --set elasticsearch.antiAffinityTopologyKey="" \
+  --set satellite.enabled=true \
+  --set satellite.image.tag=v0.4.0 \
+  -n ${namespace} --create-namespace
+cd $WORK_DIR
+rm -rf code-server
+# helm uninstall skywalking -n ${namespace} 
+skywalking_route_rule=`getarg skywalking_route_rule $@ 2>/dev/null`
+skywalking_route_rule=${skywalking_route_rule:-'skywalking.localhost'}
+srv_name=$(kubectl get service -n ${namespace} | grep skywalking | grep ui | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
+install_ingress_rule \
+--name skywalking \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${skywalking_route_rule}
+
+
 
 echo "---------------------------------------------------------------------"
 echo "done"

@@ -25,7 +25,7 @@ install_coder(){
   # install code server
   # https://github.com/coder/code-server/blob/main/docs/helm.md
   # https://github.com/coder/code-server/blob/main/ci/helm-chart/values.yaml
-  git clone https://github.com/coder/code-server 2>/dev/null
+  git clone ${GHPROXY}https://github.com/coder/code-server 2>/dev/null
   cd code-server
   helm upgrade --install code-server ci/helm-chart \
     --set persistence.storageClass=${storage_class} \

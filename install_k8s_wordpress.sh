@@ -33,7 +33,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
 --set image.tag=latest \
---set replicaCount=1 \
+--set replicaCount=2 \
 --set mariadb.enabled=false \
 --set persistence.enabled=false \
 --set wordpressUsername=admin \
@@ -44,6 +44,8 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
 --set externalDatabase.database=wordpress \
+--set extraEnvVars[0].name=WP_AUTO_UPDATE_CORE \
+--set extraEnvVars[0].value=true \
 -n ${namespace} --create-namespace
 
 
