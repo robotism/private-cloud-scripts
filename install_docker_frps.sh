@@ -87,6 +87,7 @@ docker run -dit \
   -l traefik.http.routers.${CONTAINER_NAME}-http.service=${CONTAINER_NAME}-http@docker \
   -l traefik.http.services.${CONTAINER_NAME}-http.loadbalancer.server.port=${port_http} \
   -l traefik.http.services.${CONTAINER_NAME}-http.loadBalancer.passHostHeader=true \
+  -l traefik.http.middlewares.${CONTAINER_NAME}-http.headers.customrequestheaders.X-Forwarded-Proto=https \
   -l traefik.http.middlewares.${CONTAINER_NAME}-http.headers.contentSecurityPolicy=upgrade-insecure-requests \
   -l traefik.tcp.routers.${CONTAINER_NAME}-tcp.rule=${tcp_route_rule} \
   -l traefik.tcp.routers.${CONTAINER_NAME}-tcp.tls=${tls} \

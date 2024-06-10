@@ -100,6 +100,7 @@ docker run -dit \
   -l traefik.http.routers.http-redirect.middlewares=https-redirect \
   -l traefik.http.middlewares.https-redirect.redirectscheme.scheme=https \
   -l traefik.http.middlewares.https-redirect.redirectscheme.permanent=false \
+  -l traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https \
   -l traefik.http.middlewares.auth-dashboard.basicauth.users=${dashboard_user}:${dashboard_password} \
   -l traefik.http.routers.dashboard.rule=${dashboard_route_rule} \
   -l traefik.http.routers.dashboard.tls=true \
