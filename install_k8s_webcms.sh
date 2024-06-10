@@ -77,10 +77,10 @@ helm upgrade --install ghost bitnami/ghost \
 --set externalDatabase.port=3306 \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
---set externalDatabase.database=halo \
+--set externalDatabase.database=ghost \
 -n ${namespace} --create-namespace
 #
-srv_name=$(kubectl get service -n ${namespace} | grep halo | awk '{print $1}')
+srv_name=$(kubectl get service -n ${namespace} | grep ghost | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
 --name ghost \
