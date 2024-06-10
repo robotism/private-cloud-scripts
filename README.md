@@ -174,6 +174,7 @@ bash <(curl -s ${REPO}/install_docker_frps.sh) \
 --dashboard_user frps \
 --token ${TOKEN} \
 "
+ansible all -m raw -a "docker logs -n 10 frps"
 
 ```
 

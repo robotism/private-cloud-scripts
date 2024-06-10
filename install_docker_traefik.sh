@@ -131,7 +131,7 @@ docker ps -a | grep ${CONTAINER_NAME} 2>/dev/null
 docker logs -n 1000 ${CONTAINER_NAME} 2>/dev/null
 
 echo "-----------------------------------------------------------"
-echo "done"
+echo "done: container name = ${CONTAINER_NAME}"
 echo "-----------------------------------------------------------"
 
   
