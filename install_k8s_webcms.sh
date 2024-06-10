@@ -82,7 +82,7 @@ helm upgrade --install ghost bitnami/ghost \
 srv_name=$(kubectl get service -n ${namespace} | grep halo | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
---name halo \
+--name ghost \
 --namespace ${namespace} \
 --ingress_class ${ingress_class} \
 --service_name $srv_name \
