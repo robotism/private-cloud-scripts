@@ -39,7 +39,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set wordpressUsername=admin \
 --set wordpressPassword=${password} \
 --set wordpressScheme=http \
---set service.type=CluserIP \
+--set service.type=ClusterIP \
 --set externalDatabase.host=mysql-primary.${db_namespace}.svc \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
