@@ -42,6 +42,9 @@ helm upgrade --install rabbitmq bitnami/rabbitmq \
   --set podManagementPolicy=Parallel \
   --set serviceAccount.create=true \
   --set serviceAccount.automountServiceAccountToken=true \
+  --set startupProbe.timeoutSeconds=60 \
+  --set livenessProbe.timeoutSeconds=60 \
+  --set readinessProbe.timeoutSeconds=60 \
   --set plugins="rabbitmq_management rabbitmq_event_exchange rabbitmq_peer_discovery_k8s" \
   --set extraPlugins="" \
   --set extraEnvVars[0].name=LOG_LEVEL \
