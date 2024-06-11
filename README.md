@@ -55,6 +55,19 @@ export K8S_SSH_PWD=xxxxxxxxxx
 ```
 
 ----
+## git 代理
+```bash
+# set socks
+git config --global http.proxy socks5://127.0.0.1:1080
+git config --global https.proxy socks5://127.0.0.1:1080
+# set http
+git config --global http.proxy http://127.0.0.1:1081
+git config --global https.proxy https://127.0.0.1:1081
+# unset
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+``
+
 
 ## 部署云服务器
 
