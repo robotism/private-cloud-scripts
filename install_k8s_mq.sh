@@ -52,7 +52,7 @@ helm upgrade --install rabbitmq bitnami/rabbitmq \
   -n ${namespace} --create-namespace
 # helm uninstall rabbitmq -n ${namespace}
 rabbitmq_route_rule=`getarg rabbitmq_route_rule $@`
-rabbitmq_route_rule=${rabbitmq_route_rule:-localhost}
+rabbitmq_route_rule=${rabbitmq_route_rule:-rabbitmq.localhost}
 srv_name=$(kubectl get service -n ${namespace} | grep rabbitmq | grep -v 'headless' | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[?(@.name=='http-stats')].port}")
 install_ingress_rule \
@@ -70,7 +70,17 @@ helm upgrade --install rocketmq rocketmq/rocketmq-cluster \
   --set broker.size.master="1" \
   -n ${namespace} --create-namespace
 # helm uninstall rocketmq -n ${namespace}
-  
+rocketmq_route_rule=`getarg rocketmq_route_rule $@`
+rocketmq_route_rule=${rocketmq_route_rule:-rocketmq.localhost}
+srv_name=$(kubectl get service -n ${namespace} | grep rocketmq | grep dashboard | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
+install_ingress_rule \
+--name rocketmq \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${rocketmq_route_rule}
   
 ## install emqx
 # https://github.com/emqx/emqx/blob/master/deploy/charts/emqx/README.md
@@ -84,4 +94,14 @@ helm upgrade --install emqx emqx/emqx \
   --set emqxConfig.EMQX_DASHBOARD__DEFAULT_PASSWORD=${password} \
   -n ${namespace} --create-namespace
 # helm uninstall emqx -n ${namespace}
-  
+emqx_route_rule=`getarg emqx_route_rule $@`
+emqx_route_rule=${emqx_route_rule:-emqx.localhost}
+srv_name=$(kubectl get service -n ${namespace} | grep emqx | grep -v 'headless' | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[?(@.name=='dashboard')].port}")
+install_ingress_rule \
+--name emqx \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${emqx_route_rule}

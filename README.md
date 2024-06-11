@@ -259,6 +259,9 @@ bash <(curl -s ${REPO}/install_k8s_db.sh) \
 ```bash
 bash <(curl -s ${REPO}/install_k8s_mq.sh) \
 --ingress_class higress \
+--rabbitmq_route_rule rabbitmq.${DOMAIN} \
+--rocketmq_route_rule rocketmq.${DOMAIN} \
+--emqx_route_rule emqx.${DOMAIN} \
 --password ${TOKEN}
 ```
 
