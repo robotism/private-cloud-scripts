@@ -132,13 +132,20 @@ install_ingress_rule \
 ## install skywalking
 # https://github.com/apache/skywalking-helm
 # SW_ES_USER,SW_ES_PASSWORD,SW_STORAGE_ES_HTTP_PROTOCOL,SW_SW_STORAGE_ES_SSL_JKS_PATH,SW_SW_STORAGE_ES_SSL_JKS_PASS
-helm upgrade --install skywalking oci://ghcr.io/apache/skywalking-helm/skywalking-helm  \
-  --version "0.0.0-739dbe570f5ca84b31416ad374640cf2e9cfaa7d" \
-  --set ui.image.tag=10.0.0 \
-  --set oap.image.tag=10.0.0 \
+git clone ${GHPROXY}https://github.com/apache/skywalking-helm
+cd skywalking-helm
+sed -i '1,31!d' chart/skywalking/Chart.yaml # remove dependences
+helm upgrade --install skywalking chart/skywalking  \
+  --version 4.6.0 \
+  --set ui.image.repository=docker.io/apache/skywalking-ui \
+  --set ui.image.tag=10.0.1 \
+  --set oap.image.repository=docker.io/apache/skywalking-oap-server \
+  --set oap.image.tag=10.0.1 \
   --set oap.replicas=1 \
-  --set oap.storageType=elasticsearch \
   --set elasticsearch.enabled=false \
+  --set postgresql.enabled=false \
+  --set banyandb.enabled=false \
+  --set oap.storageType=elasticsearch \
   --set elasticsearch.replicas=1 \
   --set elasticsearch.config.protocol=${es_protocol:-http} \
   --set elasticsearch.config.host=${es_host:-elasticsearch.${es_namespace}.svc} \
@@ -147,9 +154,12 @@ helm upgrade --install skywalking oci://ghcr.io/apache/skywalking-helm/skywalkin
   --set elasticsearch.persistence.enabled=true \
   --set elasticsearch.antiAffinity="" \
   --set elasticsearch.antiAffinityTopologyKey="" \
-  --set satellite.enabled=true \
-  --set satellite.image.tag=v0.4.0 \
+  --set satellite.enabled=false \
+  --set satellite.image.repository=docker.io/apache/skywalking-satellite \
+  --set satellite.image.tag=v1.2.0 \
   -n ${namespace} --create-namespace
+cd $WORK_DIR
+rm -rf skywalking-helm
 # helm uninstall skywalking -n ${namespace} 
 skywalking_route_rule=`getarg skywalking_route_rule $@ 2>/dev/null`
 skywalking_route_rule=${skywalking_route_rule:-'skywalking.localhost'}
