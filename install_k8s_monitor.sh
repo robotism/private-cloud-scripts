@@ -132,7 +132,6 @@ install_ingress_rule \
 ## install skywalking
 # https://github.com/apache/skywalking-helm
 # SW_ES_USER,SW_ES_PASSWORD,SW_STORAGE_ES_HTTP_PROTOCOL,SW_SW_STORAGE_ES_SSL_JKS_PATH,SW_SW_STORAGE_ES_SSL_JKS_PASS
-
 git clone ${GHPROXY}https://github.com/apache/skywalking-helm 2>/dev/null
 cd skywalking-helm
 helm repo add elastic https://helm.elastic.co
