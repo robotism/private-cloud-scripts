@@ -132,12 +132,8 @@ install_ingress_rule \
 ## install skywalking
 # https://github.com/apache/skywalking-helm
 # SW_ES_USER,SW_ES_PASSWORD,SW_STORAGE_ES_HTTP_PROTOCOL,SW_SW_STORAGE_ES_SSL_JKS_PATH,SW_SW_STORAGE_ES_SSL_JKS_PASS
-git clone ${GHPROXY}https://github.com/apache/skywalking-helm 2>/dev/null
-cd skywalking-helm
-helm repo add elastic https://helm.elastic.co
-helm dep up chart/skywalking
-helm upgrade --install skywalking chart/skywalking  \
-  --version 4.5.0 \
+helm upgrade --install skywalking oci://ghcr.io/apache/skywalking-helm/skywalking-helm  \
+  --version "0.0.0-739dbe570f5ca84b31416ad374640cf2e9cfaa7d" \
   --set ui.image.tag=10.0.0 \
   --set oap.image.tag=10.0.0 \
   --set oap.replicas=1 \
@@ -154,8 +150,6 @@ helm upgrade --install skywalking chart/skywalking  \
   --set satellite.enabled=true \
   --set satellite.image.tag=v0.4.0 \
   -n ${namespace} --create-namespace
-cd $WORK_DIR
-rm -rf skywalking-helm
 # helm uninstall skywalking -n ${namespace} 
 skywalking_route_rule=`getarg skywalking_route_rule $@ 2>/dev/null`
 skywalking_route_rule=${skywalking_route_rule:-'skywalking.localhost'}
