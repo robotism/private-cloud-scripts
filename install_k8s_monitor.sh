@@ -41,7 +41,7 @@ if [ ! -f "$es_password" ]; then
 es_password=$(kubectl get secret elasticsearch -n ${es_namespace} -o jsonpath='{.data.elasticsearch-password}' | base64 --decode)
 fi
 
-kubectl create namespace ${namespace}
+kubectl create namespace ${namespace} 2>/dev/null
 kubectl delete secret kibana-admin -n ${namespace} 2>/dev/null
 kubectl create secret generic kibana-admin -n ${namespace} \
   --from-literal=kibana-password=${es_password} \
@@ -133,9 +133,7 @@ install_ingress_rule \
 # https://github.com/apache/skywalking-helm
 # SW_ES_USER,SW_ES_PASSWORD,SW_STORAGE_ES_HTTP_PROTOCOL,SW_SW_STORAGE_ES_SSL_JKS_PATH,SW_SW_STORAGE_ES_SSL_JKS_PASS
 
-git clone ${GHPROXY}https://github.com/apache/skywalking-helm 2>/dev/null
-cd skywalking-helm
-helm upgrade --install skywalking chart/skywalking  \
+helm upgrade --install skywalking oci://registry-1.docker.io/apache/skywalking-helm \
   --version 4.5.0 \
   --set ui.image.tag=10.0.0 \
   --set oap.image.tag=10.0.0 \
@@ -153,8 +151,6 @@ helm upgrade --install skywalking chart/skywalking  \
   --set satellite.enabled=true \
   --set satellite.image.tag=v0.4.0 \
   -n ${namespace} --create-namespace
-cd $WORK_DIR
-rm -rf skywalking-helm
 # helm uninstall skywalking -n ${namespace} 
 skywalking_route_rule=`getarg skywalking_route_rule $@ 2>/dev/null`
 skywalking_route_rule=${skywalking_route_rule:-'skywalking.localhost'}
