@@ -96,7 +96,7 @@ spec:
 " | kubectl apply -f -
 
 
-umami_route_rule=`getarg umami_route_rule $@`
+umami_route_rule=`getarg umami_route_rule $@ 2>/dev/null`
 umami_route_rule=${umami_route_rule:-'umami.localhost'}
 srv_name=$(kubectl get service -n ${namespace} | grep umami | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
