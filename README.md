@@ -294,6 +294,15 @@ bash <(curl -s ${REPO}/install_k8s_monitor.sh) \
 --password ${TOKEN}
 ```
 
+### 一键部署 unami
+
+```bash
+bash <(curl -s ${REPO}/install_k8s_unami.sh) \
+--ingress_class higress \
+--unami_route_rule unami.${DOMAIN} \
+--password ${TOKEN}
+```
+
 ### 一键部署 cloud-ide(code-server)
 
 ```bash
