@@ -19,12 +19,24 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 
 
-## mysql 
+## mysql7
+# https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
+# helm upgrade --install mysql57 bitnami/mysql \
+#   --set image.tag=5.7.43-debian-11-r73 \
+#   --set global.storageClass=${storage_class} \
+#   --set auth.rootPassword=${password} \
+#   --set auth.authenticationPolicy=replication \
+#   --set architecture=replication \
+#   -n ${namespace} --create-namespace
+# helm uninstall mysql -n ${namespace}
+
+
+## mysql8
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
 helm upgrade --install mysql bitnami/mysql \
   --set global.storageClass=${storage_class} \
-  --set image.debug=true \
   --set auth.rootPassword=${password} \
+  --set auth.authenticationPolicy=replication \
   --set architecture=replication \
   -n ${namespace} --create-namespace
 # helm uninstall mysql -n ${namespace}
