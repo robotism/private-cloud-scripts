@@ -105,6 +105,7 @@ if [ "$web_provider" = "drupal" ]; then
 helm upgrade --install drupal bitnami/drupal \
 --set image.tag=latest \
 --set mysql.enabled=false \
+--set mariadb.enabled=false \
 --set postgresql.enabled=false \
 --set replicaCount=2 \
 --set drupalUsername=admin \
