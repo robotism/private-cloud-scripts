@@ -86,7 +86,6 @@ helm upgrade --install ghost bitnami/ghost \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
 --set externalDatabase.database=ghost \
---set allowEmptyPassword=false \
 -n ${namespace} --create-namespace
 #
 srv_name=$(kubectl get service -n ${namespace} | grep ghost | awk '{print $1}')
@@ -118,6 +117,7 @@ helm upgrade --install drupal bitnami/drupal \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
 --set externalDatabase.database=drupal \
+--set allowEmptyPassword=false \
 -n ${namespace} --create-namespace
 #
 srv_name=$(kubectl get service -n ${namespace} | grep drupal | awk '{print $1}')
