@@ -33,6 +33,7 @@ web_route_rule=${web_route_rule:-'www.localhost'}
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS halo;show databases;'
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS ghost;show databases;'
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS drupal;show databases;'
 
 
 
@@ -111,7 +112,6 @@ helm upgrade --install drupal bitnami/drupal \
 --set drupalUsername=admin \
 --set drupalPassword=${password} \
 --set service.type=ClusterIP \
---set externalDatabase.platform=mysql \
 --set externalDatabase.host=mysql-primary.${db_namespace}.svc \
 --set externalDatabase.port=3306 \
 --set externalDatabase.user=root \
