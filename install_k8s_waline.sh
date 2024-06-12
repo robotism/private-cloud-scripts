@@ -65,7 +65,7 @@ spec:
             - name: MYSQL_HOST
               value: \"mysql-primary.${db_namespace}.svc\"
             - name: MYSQL_PORT
-              value: 3306
+              value: \"3306\"
           readinessProbe:
             failureThreshold: 1
             httpGet:
@@ -112,6 +112,6 @@ install_ingress_rule \
 
 
 echo "---------------------------------------------"
-echo "done: admin:umami"
+echo "done"
 echo "---------------------------------------------"
 

@@ -313,6 +313,14 @@ bash <(curl -s ${REPO}/install_k8s_ide.sh) \
 ```
 
 
+### 一键部署 waline
+
+```bash
+bash <(curl -s ${REPO}/install_k8s_waline.sh) \
+--ingress_class higress \
+--waline_route_rule waline.${DOMAIN} \
+--password ${TOKEN}
+```
 
 ### 一键部署 WebCMS
 
