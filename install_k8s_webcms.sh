@@ -43,6 +43,7 @@ helm upgrade --install halo halo/halo \
 --set image.tag=2 \
 --set mysql.enabled=false \
 --set postgresql.enabled=false \
+--set replicaCount=2 \
 --set haloUsername=admin \
 --set haloPassword=${password} \
 --set externalDatabase.platform=mysql \
@@ -74,6 +75,7 @@ helm upgrade --install ghost bitnami/ghost \
 --set image.tag=latest \
 --set mysql.enabled=false \
 --set postgresql.enabled=false \
+--set replicaCount=2 \
 --set ghostUsername=admin \
 --set ghostPassword=${password} \
 --set service.type=ClusterIP \
@@ -96,6 +98,36 @@ install_ingress_rule \
 --domain ${web_route_rule}
 fi
 
+
+
+if [ "$web_provider" = "drupal" ]; then
+# https://github.com/bitnami/charts/blob/main/bitnami/drupal/README.md
+helm upgrade --install drupal bitnami/drupal \
+--set image.tag=latest \
+--set mysql.enabled=false \
+--set postgresql.enabled=false \
+--set replicaCount=2 \
+--set drupalUsername=admin \
+--set drupalPassword=${password} \
+--set service.type=ClusterIP \
+--set externalDatabase.platform=mysql \
+--set externalDatabase.host=mysql-primary.${db_namespace}.svc \
+--set externalDatabase.port=3306 \
+--set externalDatabase.user=root \
+--set externalDatabase.password=${password} \
+--set externalDatabase.database=drupal \
+-n ${namespace} --create-namespace
+#
+srv_name=$(kubectl get service -n ${namespace} | grep drupal | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
+install_ingress_rule \
+--name drupal \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${web_route_rule}
+fi
 
 
 
