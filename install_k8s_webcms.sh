@@ -86,6 +86,7 @@ helm upgrade --install ghost bitnami/ghost \
 --set externalDatabase.user=root \
 --set externalDatabase.password=${password} \
 --set externalDatabase.database=ghost \
+--set allowEmptyPassword=false \
 -n ${namespace} --create-namespace
 #
 srv_name=$(kubectl get service -n ${namespace} | grep ghost | awk '{print $1}')
