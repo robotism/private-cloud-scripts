@@ -103,6 +103,9 @@ if [ ! -f "/usr/bin/crontab" ];then
   apt install -y cron
 fi
 
+if [ ! -f "/usr/bin/pwgen" ];then
+  apt install -y pwgen
+fi
 
 # swap off
 if [ ! -n "`cat /etc/sysctl.conf | grep 'vm.swappiness' | grep '0'`" ]; then

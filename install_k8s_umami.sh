@@ -29,6 +29,7 @@ db_namespace=${db_namespace:-db-system}
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS umami;show databases;'
 
+# https://stianlagstad.no/2022/08/deploy-umami-analytics-with-kubernetes/
 
 echo "
 kind: Deployment
@@ -56,7 +57,7 @@ spec:
               containerPort: 3000
           env:
             - name: TRACKER_SCRIPT_NAME
-              value: \"{{ randAlphaNum 8 | lower }}\" # Just need to be something other than "umami", so that ad blockers don't block it
+              value: \"$(pwgen 16 -n 1)\" # Just need to be something other than "umami", so that ad blockers don't block it
             - name: DISABLE_TELEMETRY
               value: \"1\"
             - name: DISABLE_UPDATES
@@ -64,7 +65,7 @@ spec:
             - name: DATABASE_URL
               value: \"mysql://root:${password}@mysql-primary.${db_namespace}.svc:3306/umami\"
             - name: HASH_SALT
-              value: \"{{ randAlphaNum 26 | lower }}\"
+              value: \"$(pwgen 16 -n 1)\"
           readinessProbe:
             failureThreshold: 1
             httpGet:
