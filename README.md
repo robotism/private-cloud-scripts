@@ -294,12 +294,12 @@ bash <(curl -s ${REPO}/install_k8s_monitor.sh) \
 --password ${TOKEN}
 ```
 
-### 一键部署 unami
+### 一键部署 umami
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_unami.sh) \
+bash <(curl -s ${REPO}/install_k8s_umami.sh) \
 --ingress_class higress \
---unami_route_rule unami.${DOMAIN} \
+--umami_route_rule umami.${DOMAIN} \
 --password ${TOKEN}
 ```
 

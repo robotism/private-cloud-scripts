@@ -27,7 +27,7 @@ db_namespace=${db_namespace:-db-system}
 
 
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS unami;show databases;'
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS umami;show databases;'
 
 
 echo "
@@ -62,7 +62,7 @@ spec:
             - name: DISABLE_UPDATES
               value: \"1\"
             - name: DATABASE_URL
-              value: \"mysql://root:${password}@mysql-primary.${db_namespace}.svc:3306/unami\"
+              value: \"mysql://root:${password}@mysql-primary.${db_namespace}.svc:3306/umami\"
             - name: HASH_SALT
               value: \"{{ randAlphaNum 26 | lower }}\"
           readinessProbe:
@@ -96,14 +96,14 @@ spec:
 " | kubectl apply -f -
 
 
-unami_route_rule=`getarg unami_route_rule $@`
-unami_route_rule=${unami_route_rule:-'unami.localhost'}
-srv_name=$(kubectl get service -n ${namespace} | grep unami | awk '{print $1}')
+umami_route_rule=`getarg umami_route_rule $@`
+umami_route_rule=${umami_route_rule:-'umami.localhost'}
+srv_name=$(kubectl get service -n ${namespace} | grep umami | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
---name unami \
+--name umami \
 --namespace ${namespace} \
 --ingress_class ${ingress_class} \
 --service_name $srv_name \
 --service_port $src_port \
---domain ${unami_route_rule}
+--domain ${umami_route_rule}
