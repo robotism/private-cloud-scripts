@@ -133,3 +133,8 @@ install_ingress_rule \
 --domain ${web_route_rule}
 # 如果出现 content mixed 问题 可以安装 ssl insecure content fixer 插件
 fi
+
+echo "---------------------------------------------"
+echo "done"
+echo "---------------------------------------------"
+

@@ -26,3 +26,8 @@ StartupNotify=false
 sudo echo "$LENS_LAUNCHEWR" > ./Lens.desktop
 sudo chmod u+x ./Lens.desktop
 fi
+
+echo "---------------------------------------------"
+echo "done"
+echo "---------------------------------------------"
+

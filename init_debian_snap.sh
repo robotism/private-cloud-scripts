@@ -25,3 +25,9 @@ echo ""
 echo 'export PATH=$PATH:/snap/bin' >> ~/.profile
 echo ""
 fi
+
+
+echo "---------------------------------------------"
+echo "done"
+echo "---------------------------------------------"
+

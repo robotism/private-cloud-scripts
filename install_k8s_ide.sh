@@ -52,3 +52,8 @@ install_coder_ingress(){
 
 install_coder $@
 install_coder_ingress $@
+
+echo "---------------------------------------------"
+echo "done"
+echo "---------------------------------------------"
+

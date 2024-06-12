@@ -105,3 +105,8 @@ install_ingress_rule \
 --service_name $srv_name \
 --service_port $src_port \
 --domain ${emqx_route_rule}
+
+echo "---------------------------------------------"
+echo "done"
+echo "---------------------------------------------"
+

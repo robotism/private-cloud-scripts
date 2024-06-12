@@ -102,3 +102,8 @@ helm upgrade --install victoria-metrics-cluster victoriametrics/victoria-metrics
 
 
 
+
+echo "---------------------------------------------"
+echo "done"
+echo "---------------------------------------------"
+

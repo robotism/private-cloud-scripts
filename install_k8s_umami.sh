@@ -108,3 +108,10 @@ install_ingress_rule \
 --service_name $srv_name \
 --service_port $src_port \
 --domain ${umami_route_rule}
+
+
+
+echo "---------------------------------------------"
+echo "done: admin:umami"
+echo "---------------------------------------------"
+
