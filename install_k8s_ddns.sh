@@ -58,7 +58,7 @@ EOF
 for domain in $domains   
 do  
 cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
-            - ${domain}
+            - "${domain}"
 EOF
 done
 cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
@@ -74,7 +74,7 @@ EOF
 for domain in $domains   
 do  
 cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
-            - ${domain}
+            - "${domain}"
 EOF
 done
 cat << EOF >> ${tmpdir}/.ddns_go_config.yaml

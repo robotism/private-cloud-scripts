@@ -261,7 +261,7 @@ bash <(curl -s ${REPO}/install_k8s_ddns.sh) \
 --dns dnspod \
 --apikey ${DP_ID} \
 --apisecret ${DP_KEY} \
---domains ${DOMAIN} \
+--domains ${DOMAIN},*.${DOMAIN} \
 --ddns_route_rule ddns.${DOMAIN} \
 --password ${TOKEN}
 ```
