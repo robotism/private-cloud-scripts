@@ -13,7 +13,7 @@ fi
 WORK_DIR=${WORK_DIR:-`pwd`}
 
 namespace=`getarg namespace $@ 2>/dev/null`
-namespace=${namespace:-"monitor-system"}
+namespace=${namespace:-"higress-system"}
 password=`getarg password $@ 2>/dev/null`
 password=${password:-"Pa44VV0rd14VVrOng"}
 storage_class=`getarg storage_class $@  2>/dev/null`
