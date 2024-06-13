@@ -161,8 +161,8 @@ sudo systemctl status ntpd.service
 fi
 
 
-init_containerd_config=`getarg init_containerd_config $@`
-if [ "$init_containerd_config" != "false" ]; then
+init_containerd_mirror=`getarg init_containerd_mirror $@`
+if [ "$init_containerd_mirror" != "false" ]; then
 CONTAINERD_MIRRORS_SH=${TEMP:-.}/container_mirrors.sh
 sudo tee $CONTAINERD_MIRRORS_SH <<-'EOF'
 export PS4='\[\e[35m\]+ $(basename $0):${FUNCNAME}:$LINENO: \[\e[0m\]'
@@ -176,11 +176,32 @@ if [ ! -f "${config_file}" ];then
     containerd config default | sed -e "${lineno}s@config.*@config_path = \"${config_path}\"@" |sed '/SystemdCgroup/s/false/true/' > $config_file
 fi
 [ ! -d "${config_path}" ] && mkdir -p ${config_path}
-params="${@:-registry.k8s.io:k8s.m.daocloud.io docker.io:docker.m.daocloud.io gcr.io:gcr.m.daocloud.io k8s.gcr.io:k8s.m.daocloud.io quay.io:quay.m.daocloud.io}"
+# https://github.com/DaoCloud/public-image-mirror
+# https://github.com/kubesre/docker-registry-mirrors
+crmirrorhost1=m.daocloud.io
+crmirrorhost2=kubesre.xyz
+params="${@:-\
+cr.l5d.io:l5d.${crmirrorhost1},l5d.${crmirrorhost2} \
+docker.elastic.co:elastic.${crmirrorhost1},elastic.${crmirrorhost2} \
+docker.io:docker.${crmirrorhost1},docker.${crmirrorhost2} \
+gcr.io:gcr.${crmirrorhost1},gcr.${crmirrorhost2} \
+ghcr.io:ghcr.${crmirrorhost1},ghcr.${crmirrorhost2} \
+k8s.gcr.io:k8s-gcr.${crmirrorhost1},k8s-gcr.${crmirrorhost2} \
+registry.k8s.io:k8s.${crmirrorhost1},k8s.${crmirrorhost2} \
+mcr.microsoft.com:mcr.${crmirrorhost1},mcr.${crmirrorhost2} \
+nvcr.io:nvcr.${crmirrorhost1},nvcr.${crmirrorhost2} \
+quay.io:quay.${crmirrorhost1},quay.${crmirrorhost2} \
+registry.jujucharms.com:jujucharms.${crmirrorhost1},jujucharms.${crmirrorhost2} \
+}"
 function content(){
+    # https://github.com/containerd/containerd/blob/main/docs/hosts.md
     printf 'server = "https://%s"\n'  "${registry}"
-    printf '[host."https://%s"]\n' "${proxy_server}"
-    printf '  capabilities = ["pull", "resolve"]'
+    local hosts=$(echo $proxy_server |  tr ',' ' ')
+    for host in $hosts   
+    do
+        printf '[host."https://%s"]\n' "${host}"
+        printf '  capabilities = ["pull", "resolve"]\n'
+    done
 }
 for param in ${params}
 do
