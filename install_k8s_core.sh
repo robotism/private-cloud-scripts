@@ -238,7 +238,7 @@ install_higress(){
 
 }
 
-install_higress_consle(){
+install_higress_console(){
   higress_route_rule=`getarg higress_route_rule $@`
   srv_name=$(kubectl get service -n higress-system | grep console | awk '{print $1}')
   srv_port=$(kubectl get services -n higress-system $srv_name -o jsonpath="{.spec.ports[0].port}")
