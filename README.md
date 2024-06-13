@@ -231,7 +231,7 @@ ansible all -m raw -a "hostname"
 
 ```
 
-### 一键初始化k8s集群(sealos)
+### 一键初始化 k8s集群(sealos)
 
 ```bash
 bash <(curl -s ${REPO}/install_k8s_core.sh) \
@@ -243,7 +243,7 @@ bash <(curl -s ${REPO}/install_k8s_core.sh) \
 ```
 
 
-### 一键部署frpc
+### 一键部署 frpc
 
 ```bash
 bash <(curl -s ${REPO}/install_k8s_frpc.sh) \
@@ -253,6 +253,15 @@ bash <(curl -s ${REPO}/install_k8s_frpc.sh) \
 --http_route_rule ${DOMAIN},*.${DOMAIN} \
 --token ${TOKEN}
 ```
+
+### 一键部署 ddns
+```bash
+bash <(curl -s ${REPO}/install_ms_ddns.sh) \
+--ingress_class higress \
+--ddns_route_rule ddns.${DOMAIN} \
+--password ${TOKEN}
+```
+
 
 ### 一键部署 rancher
 

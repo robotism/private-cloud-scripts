@@ -27,7 +27,7 @@ install_kubeblocks(){
   # echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
   fi
 }
-install_kubeblocks
+# install_kubeblocks
 
 
 ## install tidb
@@ -62,11 +62,11 @@ helm upgrade --install mysql bitnami/mysql \
 
 ## install postgresql
 # https://github.com/bitnami/charts/tree/main/bitnami/postgresql/#installing-the-chart
-helm upgrade --install postgresql bitnami/postgresql \
-  --set global.storageClass=${storage_class} \
-  --set global.postgresql.auth.postgresPassword=${password} \
-  --set architecture=replication \
-  -n ${namespace} --create-namespace
+# helm upgrade --install postgresql bitnami/postgresql \
+#   --set global.storageClass=${storage_class} \
+#   --set global.postgresql.auth.postgresPassword=${password} \
+#   --set architecture=replication \
+#   -n ${namespace} --create-namespace
 # helm uninstall postgresql -n ${namespace}
 
 
