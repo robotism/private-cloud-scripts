@@ -56,7 +56,7 @@ helm upgrade --install kibana bitnami/kibana \
   --set elasticsearch.security.auth.createSystemUser=true \
   --set elasticsearch.security.auth.elasticsearchPasswordSecret="kibana-admin" \
   -n ${namespace} --create-namespace
-# helm uninstall kibana -n ${NAMEPSACE}
+# helm uninstall kibana -n ${namespace}
 kibana_route_rule=`getarg kibana_route_rule $@`
 kibana_route_rule=${kibana_route_rule:-localhost}
 srv_name=$(kubectl get service -n ${namespace} | grep kibana | awk '{print $1}')
@@ -88,7 +88,7 @@ helm upgrade --install prometheus bitnami/prometheus \
   --set server.extraScrapeConfigs[0].relabel_configs[0].replacement='$1' \
   --set server.extraScrapeConfigs[0].relabel_configs[0].action='labelmap' \
   -n ${namespace} --create-namespace
-# helm uninstall prometheus -n ${NAMEPSACE}
+# helm uninstall prometheus -n ${namespace}
 prometheus_route_rule=`getarg prometheus_route_rule $@`
 prometheus_route_rule=${prometheus_route_rule:-'prometheus.localhost'}
 srv_name=$(kubectl get service -n ${namespace} | grep prometheus | awk '{print $1}')
@@ -115,7 +115,7 @@ helm upgrade --install grafana bitnami/grafana \
   --set grafana.extraEnvVars[2].name=GF_SECURITY_ALLOW_EMBEDDING \
   --set-string grafana.extraEnvVars[2].value=true \
   -n ${namespace} --create-namespace
-# helm uninstall grafana -n ${NAMEPSACE}
+# helm uninstall grafana -n ${namespace}
 grafana_route_rule=`getarg grafana_route_rule $@`
 grafana_route_rule=${grafana_route_rule:-'grafana.localhost'}
 srv_name=$(kubectl get service -n ${namespace} | grep grafana | awk '{print $1}')

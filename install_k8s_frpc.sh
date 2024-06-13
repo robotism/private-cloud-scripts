@@ -19,8 +19,8 @@ tmpdir=$(getarg tmpdir $@)
 tmpdir=${tmpdir:-"$(pwd)"}
 tmpdir=${tmpdir}/.k8s_${name}
 
-namepsace=$(getarg namepsace $@)
-namepsace=${namepsace:-higress-system}
+namespace=$(getarg namespace $@)
+namespace=${namespace:-higress-system}
 
 http_upstream_host=$(getarg http_upstream_host $@)
 http_upstream_host=${http_upstream_host:-higress-gateway.higress-system.svc.cluster.local}
@@ -91,15 +91,15 @@ EOF
   cat ${tmpdir}/frpc.toml
   echo "------------------------------------------------------"
 
-  kubectl delete secret ${name}.toml -n ${namepsace} 2>/dev/null
-  kubectl create secret generic ${name}.toml -n ${namepsace} --from-file=${tmpdir}/frpc.toml
+  kubectl delete secret ${name}.toml -n ${namespace} 2>/dev/null
+  kubectl create secret generic ${name}.toml -n ${namespace} --from-file=${tmpdir}/frpc.toml
 
 cat << EOF > ${tmpdir}/${FRPC_YAML}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ${name}
-  namespace: ${namepsace}
+  namespace: ${namespace}
   labels:
     app: ${name}
     frps: ${bind_ip}

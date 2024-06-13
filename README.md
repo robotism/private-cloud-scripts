@@ -256,8 +256,12 @@ bash <(curl -s ${REPO}/install_k8s_frpc.sh) \
 
 ### 一键部署 ddns
 ```bash
-bash <(curl -s ${REPO}/install_ms_ddns.sh) \
+bash <(curl -s ${REPO}/install_k8s_ddns.sh) \
 --ingress_class higress \
+--dns dnspod \
+--apikey ${DP_ID} \
+--apisecret ${DP_KEY} \
+--domains ${DOMAIN} \
 --ddns_route_rule ddns.${DOMAIN} \
 --password ${TOKEN}
 ```

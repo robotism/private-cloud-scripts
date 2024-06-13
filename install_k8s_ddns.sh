@@ -27,8 +27,82 @@ db_namespace=${db_namespace:-db-system}
 
 
 
+dns=`getarg dns $@`
+apikey=`getarg apikey $@`
+apisecret=`getarg apisecret $@`
+domains=`getarg domains $@`
+domains=$(echo $domains | tr ',' ' ')
+
 
 # https://github.com/jeessy2/ddns-go/blob/master/README.md#docker%E4%B8%AD%E4%BD%BF%E7%94%A8
+
+config_name=ddns-config
+
+tmpdir=$(getarg tmpdir $@)
+tmpdir=${tmpdir:-"$(pwd)"}
+tmpdir=${tmpdir}/.k8s_${config_name}
+
+mkdir -p $tmpdir
+
+cat << EOF > ${tmpdir}/.ddns_go_config.yaml
+dnsconf:
+    - name: ""
+      ipv4:
+        enable: true
+        gettype: url
+        url: https://myip.ipip.net, https://ddns.oray.com/checkip, https://ip.3322.net, https://4.ipw.cn
+        netinterface: ""
+        cmd: ""
+        domains:
+EOF
+for domain in $domains   
+do  
+cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
+            - ${domain}
+EOF
+done
+cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
+      ipv6:
+        enable: false
+        gettype: url
+        url: https://speed.neu6.edu.cn/getIP.php, https://v6.ident.me, https://6.ipw.cn
+        netinterface: ""
+        cmd: ""
+        ipv6reg: ""
+        domains:
+EOF
+for domain in $domains   
+do  
+cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
+            - ${domain}
+EOF
+done
+cat << EOF >> ${tmpdir}/.ddns_go_config.yaml
+      dns:
+        name: ${dns}
+        id: "${apikey}"
+        secret: ${apisecret}
+      ttl: ""
+user:
+    username: admin
+    password: $(htpasswd -bnBC 10 "" ${password} | tr -d ':\n')
+webhook:
+    webhookurl: ""
+    webhookrequestbody: ""
+    webhookheaders: ""
+notallowwanaccess: true
+lang: zh
+EOF
+
+echo "${config_name}.yaml"
+echo "------------------------------------------------------"
+cat ${tmpdir}/.ddns_go_config.yaml
+echo "------------------------------------------------------"
+
+kubectl delete secret ${config_name}.yaml -n ${namespace} 2>/dev/null
+kubectl create secret generic ${config_name}.yaml -n ${namespace} --from-file=${tmpdir}/.ddns_go_config.yaml
+
+rm -rf ${tmpdir}
 
 echo "
 kind: Deployment
@@ -67,6 +141,14 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 2
+          volumeMounts:
+            - name: config
+              mountPath: "/root/"
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            secretName: ${config_name}.yaml
 " | kubectl apply -f -
 
 

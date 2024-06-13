@@ -107,6 +107,10 @@ if [ ! -f "/usr/bin/pwgen" ];then
   apt install -y pwgen
 fi
 
+if [ ! -f "/usr/bin/htpasswd" ];then
+  apt install -y apache2-utils
+fi
+
 # swap off
 if [ ! -n "`cat /etc/sysctl.conf | grep 'vm.swappiness' | grep '0'`" ]; then
 echo "vm.swappiness = 0">> /etc/sysctl.conf
