@@ -18,6 +18,20 @@ storage_class=${storage_class:-""}
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 
+# https://github.com/labring-actions/cluster-image-docs/blob/main/docs/docker/apps.md
+# https://github.com/labring-actions/cluster-image/blob/main/applications/kubeblocks
+install_kubeblocks(){
+  if [ ! -n "`kubectl get po -A | grep kubeblocks`" ]; then
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.8.3
+  # kbcli kb upgrade --version 0.8.3
+  # echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
+  fi
+}
+install_kubeblocks
+
+
+## install tidb
+
 
 ## mysql7
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
@@ -43,7 +57,6 @@ helm upgrade --install mysql bitnami/mysql \
 
 
 
-## install tidb
 
 
 
@@ -68,6 +81,7 @@ helm upgrade --install redis bitnami/redis \
   -n ${namespace} --create-namespace
 
 
+
 ## install elasticsearch
 # https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch/#installing-the-chart
 helm upgrade --install elasticsearch bitnami/elasticsearch \
@@ -86,6 +100,7 @@ helm upgrade --install elasticsearch bitnami/elasticsearch \
 # helm uninstall elasticsearch -n ${namespace}
 
 
+
 ## install clickhouse
 # https://github.com/bitnami/charts/tree/main/bitnami/clickhouse/#installing-the-chart
 # helm upgrade --install clickhouse bitnami/clickhouse \
@@ -98,6 +113,8 @@ helm upgrade --install elasticsearch bitnami/elasticsearch \
 #   -n ${namespace} --create-namespace
 # helm uninstall clickhouse -n ${namespace}
 
+
+
 ## install victoriametrics
 # https://github.com/VictoriaMetrics/helm-charts
 helm repo add victoriametrics https://victoriametrics.github.io/helm-charts/
@@ -108,9 +125,6 @@ helm upgrade --install victoria-metrics-cluster victoriametrics/victoria-metrics
   --set vmstorage.fullnameOverride=victoria-metrics-cluster-vmstorage \
   -n ${namespace} --create-namespace
 # helm uninstall victoria-metrics-cluster -n ${namespace}
-
-
-
 
 
 
