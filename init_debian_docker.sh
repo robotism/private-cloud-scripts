@@ -161,7 +161,7 @@ sudo systemctl status ntpd.service
 fi
 
 
-init_containerd_config=`getarg init_docker_config $@`
+init_containerd_config=`getarg init_containerd_config $@`
 if [ "$init_containerd_config" = "true" ]; then
 CONTAINERD_MIRRORS_SH=${TEMP:-.}/container_mirrors.sh
 sudo tee $CONTAINERD_MIRRORS_SH <<-'EOF'
