@@ -26,42 +26,54 @@ db_namespace=`getarg db_namespace $@ 2>/dev/null`
 db_namespace=${db_namespace:-db-system}
 
 
+kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
+mysql -uroot -p${password} -e '\
+CREATE DATABASE IF NOT EXISTS umami;\
+show databases;\
+'"
 
-
-# https://github.com/jeessy2/ddns-go/blob/master/README.md#docker%E4%B8%AD%E4%BD%BF%E7%94%A8
+# https://stianlagstad.no/2022/08/deploy-umami-analytics-with-kubernetes/
 
 echo "
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: ddns
+  name: umami
   namespace: ${namespace:-default}
   labels:
-    app: ddns
+    app: umami
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ddns
+      app: umami
   template:
     metadata:
       labels:
-        app: ddns
+        app: umami
     spec:
       containers:
-        - name: ddns
-          image: docker.io/jeessy/ddns-go:latest
+        - name: umami
+          image: docker.umami.dev/umami-software/umami:mysql-latest
           ports:
-            - name: ddns
-              containerPort: 9876 
+            - name: umami
+              containerPort: 3000
           env:
+            - name: TRACKER_SCRIPT_NAME
+              value: \"$(pwgen 16 -n 1)\" # Just need to be something other than "umami", so that ad blockers don't block it
+            - name: DISABLE_TELEMETRY
+              value: \"1\"
+            - name: DISABLE_UPDATES
+              value: \"1\"
+            - name: DATABASE_URL
+              value: \"mysql://root:${password}@mysql-primary.${db_namespace}.svc:3306/umami\"
             - name: HASH_SALT
               value: \"$(pwgen 16 -n 1)\"
           readinessProbe:
             failureThreshold: 1
             httpGet:
               path: /
-              port: 9876
+              port: 3000
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -74,35 +86,35 @@ echo "
 apiVersion: v1
 kind: Service
 metadata:
-  name: ddns
+  name: umami
   namespace: ${namespace:-default}
 spec:
   type: ClusterIP
   ports:
     - protocol: TCP
-      name: ddns
-      port: 9876
-      targetPort: 9876
+      name: umami
+      port: 3000
+      targetPort: 3000
   selector:
-    app: ddns
+    app: umami
 " | kubectl apply -f -
 
 
-ddns_route_rule=`getarg ddns_route_rule $@ 2>/dev/null`
-ddns_route_rule=${ddns_route_rule:-'ddns.localhost'}
-srv_name=$(kubectl get service -n ${namespace} | grep ddns | awk '{print $1}')
+umami_route_rule=`getarg umami_route_rule $@ 2>/dev/null`
+umami_route_rule=${umami_route_rule:-'umami.localhost'}
+srv_name=$(kubectl get service -n ${namespace} | grep umami | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
---name ddns \
+--name umami \
 --namespace ${namespace} \
 --ingress_class ${ingress_class} \
 --service_name $srv_name \
 --service_port $src_port \
---domain ${ddns_route_rule}
+--domain ${umami_route_rule}
 
 
 
 echo "---------------------------------------------"
-echo "done"
+echo "done: admin:umami"
 echo "---------------------------------------------"
 
