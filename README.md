@@ -235,20 +235,20 @@ ansible all -m raw -a "hostname"
 
 ```bash
 bash <(curl -s ${REPO}/install_k8s_core.sh) \
---cri_provider docker \
 --master_ips ${K8S_MASTER_IPS:-""} \
 --node_ips ${K8S_NODE_IPS:-""} \
 --password ${K8S_SSH_PWD} \
 --ingress_class higress \
 --higress_route_rule higress.${DOMAIN}
+# --cri_provider docker \
 
 # 如果使用docker, 并且需要使用镜像服务器, 请重新执行↓, 否则跳过
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
---profile ${PROFILE:-release} \
---sources ustc \
---clean_cri false \
---install_docker false \
-"
+# ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
+# --profile ${PROFILE:-release} \
+# --sources ustc \
+# --clean_cri false \
+# --install_docker false \
+# "
 ```
 
 
