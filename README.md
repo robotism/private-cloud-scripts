@@ -246,6 +246,7 @@ bash <(curl -s ${REPO}/install_k8s_core.sh) \
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
+--clean_cri false \
 --install_docker false \
 "
 ```
