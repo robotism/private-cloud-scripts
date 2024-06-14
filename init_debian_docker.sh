@@ -23,25 +23,65 @@ sources=`getarg sources $@`
 
 DEBIAN_SOURCE=/etc/apt/sources.list
 if [ ! -f "${DEBIAN_SOURCE}.old.bak" ]; then
-sudo \cp -rf ${DEBIAN_SOURCE} ${DEBIAN_SOURCE}.old.bak
-sudo cat ${DEBIAN_SOURCE}.old.bak
+  sudo \cp -rf ${DEBIAN_SOURCE} ${DEBIAN_SOURCE}.old.bak
+  sudo cat ${DEBIAN_SOURCE}.old.bak
 fi
 if [ "$sources" = "ustc" ]; then
-sudo \cp -rf ${DEBIAN_SOURCE}.old.bak ${DEBIAN_SOURCE}
-sudo sed -i "s|deb.debian.org|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
-sudo sed -i 's|security.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' ${DEBIAN_SOURCE}
-sudo sed -i "s|mirrors.163.com|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
-sudo cat ${DEBIAN_SOURCE}
+  sudo \cp -rf ${DEBIAN_SOURCE}.old.bak ${DEBIAN_SOURCE}
+  sudo sed -i "s|deb.debian.org|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|security.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.163.com|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
+  sudo cat ${DEBIAN_SOURCE}
 fi
 
 
 skip_update=`getarg skip_update $@`
 
 if [ "$skip_update" != "true" ]; then
-apt -y update
-apt -y upgrade
-apt -y autoremove
+  sudo apt -y update
+  sudo apt -y upgrade
+  sudo apt -y autoremove
 fi
+
+
+# init tools
+
+if [ ! -f "/usr/bin/vim" ];then
+  sudo apt install -y vim
+fi
+
+if [ ! -f "/usr/bin/git" ];then
+  sudo apt install -y git
+fi
+
+if [ ! -f "/usr/sbin/ifconfig" ];then
+  sudo apt install -y net-tools
+fi
+
+if [ ! -f "/usr/bin/nslookup" ];then
+  sudo apt install -y dnsutils
+fi
+
+if [ ! -f "/usr/bin/wget" ];then
+  sudo apt install -y wget
+fi
+
+if [ ! -f "/usr/bin/curl" ];then
+  sudo apt install -y curl
+fi
+
+if [ ! -f "/usr/bin/crontab" ];then
+  sudo apt install -y cron
+fi
+
+if [ ! -f "/usr/bin/pwgen" ];then
+  sudo apt install -y pwgen
+fi
+
+if [ ! -f "/usr/bin/htpasswd" ];then
+  sudo apt install -y apache2-utils
+fi
+
 
 
 
@@ -73,46 +113,6 @@ echo 'echo -e "\e[0m" ' >> $NEOFETCH
 echo '' >> $NEOFETCH
 
 fi
-
-# init tools
-
-
-if [ ! -f "/usr/bin/vim" ];then
-  apt install -y vim
-fi
-
-if [ ! -f "/usr/bin/git" ];then
-  apt install -y git
-fi
-
-if [ ! -f "/usr/sbin/ifconfig" ];then
-  apt install -y net-tools
-fi
-
-if [ ! -f "/usr/bin/nslookup" ];then
-  apt install -y dnsutils
-fi
-
-if [ ! -f "/usr/bin/wget" ];then
-  apt install -y wget
-fi
-
-if [ ! -f "/usr/bin/curl" ];then
-  apt install -y curl
-fi
-
-if [ ! -f "/usr/bin/crontab" ];then
-  apt install -y cron
-fi
-
-if [ ! -f "/usr/bin/pwgen" ];then
-  apt install -y pwgen
-fi
-
-if [ ! -f "/usr/bin/htpasswd" ];then
-  apt install -y apache2-utils
-fi
-
 
 # swap off
 if [ ! -n "`cat /etc/sysctl.conf | grep 'vm.swappiness' | grep '0'`" ]; then
@@ -182,26 +182,26 @@ if [ ! -n "`which ntpd`" ]; then
 fi
 
 if [ ! -n "`which irqbalance`" ]; then
-  apt install -y irqbalance
-  systemctl enable irqbalance
-  systemctl start irqbalance
+  sudo apt install -y irqbalance
+  sudo systemctl enable irqbalance
+  sudo systemctl start irqbalance
 fi
 
 if [ ! -n "`which cpupower`" ]; then
-  apt install -y linux-cpupower
+  sudo apt install -y linux-cpupower
   sudo cpupower frequency-set --governor performance
 fi
 
 
 clean_cri=`getarg clean_cri $@`
 if [ "$clean_cri" != "false" ]; then
-  apt remove docker docker-engine docker.io containerd runc
-  rm -rf /etc/docker
-  rm -rf /var/lib/docker
-  rm -rf /etc/containerd
-  rm -rf /var/lib/containerd
-  rm -rf /run/containerd
-if [ "$init_containerd_mirror" != "false" ]; then
+  sudo apt remove docker docker-engine docker.io containerd runc
+  sudo rm -rf /etc/docker
+  sudo rm -rf /var/lib/docker
+  sudo rm -rf /etc/containerd
+  sudo rm -rf /var/lib/containerd
+  sudo rm -rf /run/containerd
+fi
 
 
 
@@ -286,7 +286,7 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
     "data-root": "DOCKER_DATA_DIR/docker"
 }
 EOF
-sudo sed -i "s/DOCKER_DATA_DIR/${DATA}/g" /etc/docker/daemon.json
+sudo sed -i "s#DOCKER_DATA_DIR#${DATA}#g" /etc/docker/daemon.json
 cat /etc/docker/daemon.json
 mkdir -p /etc/systemd/system/docker.service.d
 cat > /etc/systemd/system/docker.service.d/limit-nofile.conf <<EOF
