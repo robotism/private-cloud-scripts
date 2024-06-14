@@ -211,7 +211,7 @@ bash <(curl -s ${REPO}/init_debian_docker.sh) \
 
 # init ansible  ------------------------
 bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
---hostname k8s-node- \
+--hostname k8s-node \
 --ips ${K8S_MASTER_IPS},${K8S_NODE_IPS} \
 --password ${K8S_SSH_PWD}
 

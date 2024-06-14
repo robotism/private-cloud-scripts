@@ -42,7 +42,7 @@ idx=0
 for ip in $ips   
 do  
   idx=`expr $idx + 1`
-  hst=${hostname:-${release:-node}}${idx}
+  hst=${hostname:-${release:-node}}-${idx}
   sshpass -p ${password} ssh -o stricthostkeychecking=no root@${ip} "hostnamectl set-hostname $hst"
   sshpass -p ${password} ssh -o stricthostkeychecking=no root@${ip} "echo -e '#\n127.0.0.1 localhost $hst\n#\n' >> /etc/hosts"
   sshpass -p ${password} ssh -o stricthostkeychecking=no root@${ip} 'rm -rf ~/.ssh/id_rsa'
