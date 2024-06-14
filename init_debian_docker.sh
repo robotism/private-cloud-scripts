@@ -17,6 +17,8 @@ fi
 
 # 初始化env
 
+DATA=${DATA:-/opt/data}
+
 sources=`getarg sources $@`
 
 DEBIAN_SOURCE=/etc/apt/sources.list
@@ -111,6 +113,7 @@ if [ ! -f "/usr/bin/htpasswd" ];then
   apt install -y apache2-utils
 fi
 
+
 # swap off
 if [ ! -n "`cat /etc/sysctl.conf | grep 'vm.swappiness' | grep '0'`" ]; then
 echo "vm.swappiness = 0">> /etc/sysctl.conf
@@ -120,9 +123,9 @@ fi
 
 
 # firewalld off
-sudo systemctl stop firewalld.service 
-sudo systemctl disable firewalld.service
-sudo systemctl status firewalld.service
+sudo systemctl stop firewalld.service 2>/dev/null
+sudo systemctl disable firewalld.service 2>/dev/null
+sudo systemctl status firewalld.service 2>/dev/null
 
 #hugepage
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
@@ -150,15 +153,45 @@ root           hard    stack          32768
 EOF
 fi
 
+modprobe br_netfilter
+cat <<EOF >  /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-arptables = 1
+net.core.somaxconn = 32768
+vm.swappiness = 0
+net.ipv4.tcp_syncookies = 0
+net.ipv4.ip_forward = 1
+fs.file-max = 1000000
+fs.inotify.max_user_watches = 1048576
+fs.inotify.max_user_instances = 1024
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.neigh.default.gc_thresh1 = 80000
+net.ipv4.neigh.default.gc_thresh2 = 90000
+net.ipv4.neigh.default.gc_thresh3 = 100000
+EOF
+sysctl --system
 
 # ntp
 
 if [ ! -n "`which ntpd`" ]; then
-apt install -y ntp ntpdate ntpstat 
-sudo systemctl start ntpd.service
-sudo systemctl enable ntpd.service
-sudo systemctl status ntpd.service
+  apt install -y ntp ntpdate ntpstat 
+  sudo systemctl start ntpd.service
+  sudo systemctl enable ntpd.service
+  sudo systemctl status ntpd.service
 fi
+
+if [ ! -n "`which irqbalance`" ]; then
+  apt install -y irqbalance
+  systemctl enable irqbalance
+  systemctl start irqbalance
+fi
+
+if [ ! -n "`which cpupower`" ]; then
+  apt install -y linux-cpupower
+  sudo cpupower frequency-set --governor performance
+fi
+
 
 
 init_containerd_mirror=`getarg init_containerd_mirror $@`
@@ -233,8 +266,21 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
         "https://registry.docker-cn.com"
     ],
     "log-driver": "json-file",
-    "log-opts": {"max-size":"16m", "max-file":"1"}
+    "log-opts": {"max-size":"100m", "max-file":"1"},
+    "exec-opts": ["native.cgroupdriver=systemd"],
+    "storage-driver": "overlay2",
+    "storage-opts": [
+      "overlay2.override_kernel_check=true"
+    ],
+    "data-root": "DOCKER_DATA_DIR/docker"
 }
+EOF
+sudo sed -i "s/DOCKER_DATA_DIR/${DATA}/g" /etc/docker/daemon.json
+cat /etc/docker/daemon.json
+mkdir -p /etc/systemd/system/docker.service.d
+cat > /etc/systemd/system/docker.service.d/limit-nofile.conf <<EOF
+[Service]
+LimitNOFILE=1048576
 EOF
 fi
 

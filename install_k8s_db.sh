@@ -31,6 +31,7 @@ install_kubeblocks(){
 
 
 ## install tidb
+kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-operator/v1.6.0/manifests/crd.yaml
 
 
 ## mysql7
@@ -47,12 +48,12 @@ install_kubeblocks(){
 
 ## mysql8
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
-helm upgrade --install mysql bitnami/mysql \
-  --set global.storageClass=${storage_class} \
-  --set auth.rootPassword=${password} \
-  --set auth.authenticationPolicy=replication \
-  --set architecture=replication \
-  -n ${namespace} --create-namespace
+# helm upgrade --install mysql bitnami/mysql \
+#   --set global.storageClass=${storage_class} \
+#   --set auth.rootPassword=${password} \
+#   --set auth.authenticationPolicy=replication \
+#   --set architecture=replication \
+#   -n ${namespace} --create-namespace
 # helm uninstall mysql -n ${namespace}
 
 
