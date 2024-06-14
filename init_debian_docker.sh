@@ -82,6 +82,9 @@ if [ ! -f "/usr/bin/htpasswd" ];then
   sudo apt install -y apache2-utils
 fi
 
+if [ ! -f "/usr/bin/jq" ];then
+  sudo apt install -y jq
+fi
 
 
 
@@ -275,26 +278,31 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
         "https://1nj0zren.mirror.aliyuncs.com",
         "https://mirror.ccs.tencentyun.com",
         "https://docker.mirrors.ustc.edu.cn",
-        "http://f1361db2.m.daocloud.io",
+        "http://docker.m.daocloud.io",
         "https://registry.docker-cn.com"
     ],
+    "max-concurrent-downloads": 20,
     "log-driver": "json-file",
+    "log-level": "warn",
     "log-opts": {"max-size":"100m", "max-file":"1"},
     "exec-opts": ["native.cgroupdriver=systemd"],
     "storage-driver": "overlay2",
     "storage-opts": [
       "overlay2.override_kernel_check=true"
     ],
-    "data-root": "DOCKER_DATA_DIR/docker"
+    "insecure-registries": [
+      "sealos.hub:5000"
+    ],
+    "data-root": "/var/lib/docker"
 }
 EOF
-sudo sed -i "s#DOCKER_DATA_DIR#${DATA}#g" /etc/docker/daemon.json
 cat /etc/docker/daemon.json
 mkdir -p /etc/systemd/system/docker.service.d
 cat > /etc/systemd/system/docker.service.d/limit-nofile.conf <<EOF
 [Service]
 LimitNOFILE=1048576
 EOF
+sudo systemctl restart docker 2>/dev/null
 fi
 
 install_docker=`getarg install_docker $@`

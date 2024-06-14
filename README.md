@@ -241,6 +241,13 @@ bash <(curl -s ${REPO}/install_k8s_core.sh) \
 --password ${K8S_SSH_PWD} \
 --ingress_class higress \
 --higress_route_rule higress.${DOMAIN}
+
+# 如果使用docker, 并且需要使用镜像服务器, 请重新执行↓, 否则跳过
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
+--profile ${PROFILE:-release} \
+--sources ustc \
+--install_docker false \
+"
 ```
 
 
