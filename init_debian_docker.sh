@@ -287,9 +287,6 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
     "log-opts": {"max-size":"100m", "max-file":"1"},
     "exec-opts": ["native.cgroupdriver=systemd"],
     "storage-driver": "overlay2",
-    "storage-opts": [
-      "overlay2.override_kernel_check=true"
-    ],
     "insecure-registries": [
       "sealos.hub:5000"
     ],
