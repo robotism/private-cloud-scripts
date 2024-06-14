@@ -37,6 +37,7 @@ kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-opera
 ## mysql7
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
 # helm upgrade --install mysql57 bitnami/mysql \
+#   --set image.registry=${bitnami_image_registry} \
 #   --set image.tag=5.7.43-debian-11-r73 \
 #   --set global.storageClass=${storage_class} \
 #   --set auth.rootPassword=${password} \
@@ -49,6 +50,7 @@ kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-opera
 ## mysql8
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
 # helm upgrade --install mysql bitnami/mysql \
+#   --set image.registry=${bitnami_image_registry} \
 #   --set global.storageClass=${storage_class} \
 #   --set auth.rootPassword=${password} \
 #   --set auth.authenticationPolicy=replication \
@@ -64,6 +66,7 @@ kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-opera
 ## install postgresql
 # https://github.com/bitnami/charts/tree/main/bitnami/postgresql/#installing-the-chart
 # helm upgrade --install postgresql bitnami/postgresql \
+#   --set image.registry=${bitnami_image_registry} \
 #   --set global.storageClass=${storage_class} \
 #   --set global.postgresql.auth.postgresPassword=${password} \
 #   --set architecture=replication \
@@ -77,6 +80,7 @@ kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-opera
 ## install redis
 # https://github.com/bitnami/charts/tree/main/bitnami/redis/#installing-the-chart
 helm upgrade --install redis bitnami/redis \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set global.redis.password=${password} \
   -n ${namespace} --create-namespace
@@ -86,6 +90,7 @@ helm upgrade --install redis bitnami/redis \
 ## install elasticsearch
 # https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch/#installing-the-chart
 helm upgrade --install elasticsearch bitnami/elasticsearch \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set master.masterOnly=false \
   --set master.replicaCount=1 \
@@ -105,6 +110,7 @@ helm upgrade --install elasticsearch bitnami/elasticsearch \
 ## install clickhouse
 # https://github.com/bitnami/charts/tree/main/bitnami/clickhouse/#installing-the-chart
 # helm upgrade --install clickhouse bitnami/clickhouse \
+#   --set image.registry=${bitnami_image_registry} \
 #   --set global.storageClass=${storage_class} \
 #   --set auth.username=root \
 #   --set auth.password=${password} \

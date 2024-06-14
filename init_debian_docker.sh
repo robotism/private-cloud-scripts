@@ -276,10 +276,7 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 {
     "registry-mirrors": [
         "https://1nj0zren.mirror.aliyuncs.com",
-        "https://mirror.ccs.tencentyun.com",
-        "https://docker.mirrors.ustc.edu.cn",
-        "http://docker.m.daocloud.io",
-        "https://registry.docker-cn.com"
+        "http://docker.m.daocloud.io"
     ],
     "max-concurrent-downloads": 20,
     "log-driver": "json-file",

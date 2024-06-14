@@ -23,6 +23,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 ## instakk kafka
 # https://github.com/bitnami/charts/tree/main/bitnami/kafka/#installing-the-chart
 helm upgrade --install kafka bitnami/kafka \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set replicaCount=1 \
   --set controller.replicaCount=1 \
@@ -33,6 +34,7 @@ helm upgrade --install kafka bitnami/kafka \
 ## install rabbitmq
 # https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq/#installing-the-chart
 helm upgrade --install rabbitmq bitnami/rabbitmq \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set image.debug=true \
   --set auth.password=${password} \

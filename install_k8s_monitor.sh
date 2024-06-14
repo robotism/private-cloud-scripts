@@ -47,6 +47,7 @@ kubectl create secret generic kibana-admin -n ${namespace} \
   --from-literal=kibana-password=${es_password} \
   --from-literal=elasticsearch-password=${es_password}
 helm upgrade --install kibana bitnami/kibana \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set elasticsearch.hosts[0]=${es_host:-elasticsearch.${es_namespace}.svc} \
   --set elasticsearch.port="9200" \
@@ -75,6 +76,7 @@ install_ingress_rule \
 # https://github.com/bitnami/charts/tree/main/bitnami/prometheus/#installing-the-chart
 # https://docs.victoriametrics.com/url-examples/ # remote write to vm
 helm upgrade --install prometheus bitnami/prometheus \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set admin.password=${password} \
   --set alertmanager.enabled=false  \
@@ -106,6 +108,7 @@ install_ingress_rule \
 ## install grafana
 # https://github.com/bitnami/charts/tree/main/bitnami/grafana/#installing-the-chart
 helm upgrade --install grafana bitnami/grafana \
+  --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set admin.password=${password} \
   --set grafana.extraEnvVars[0].name=GF_SECURITY_COOKIE_SECURE \
