@@ -193,6 +193,17 @@ if [ ! -n "`which cpupower`" ]; then
 fi
 
 
+clean_cri=`getarg clean_cri $@`
+if [ "$clean_cri" != "false" ]; then
+  apt remove docker docker-engine docker.io containerd runc
+  rm -rf /etc/docker
+  rm -rf /var/lib/docker
+  rm -rf /etc/containerd
+  rm -rf /var/lib/containerd
+  rm -rf /run/containerd
+if [ "$init_containerd_mirror" != "false" ]; then
+
+
 
 init_containerd_mirror=`getarg init_containerd_mirror $@`
 if [ "$init_containerd_mirror" != "false" ]; then
