@@ -338,6 +338,7 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-  2>/dev/null
 
 
 echo "---------------------------------------------"
+echo "kubeconfig: cat /etc/kubernetes/admin.conf"
 echo "done"
 echo "---------------------------------------------"
 
