@@ -239,7 +239,7 @@ bash <(curl -s ${REPO}/install_k8s_core.sh) \
 --node_ips ${K8S_NODE_IPS:-""} \
 --password ${K8S_SSH_PWD} \
 --ingress_class higress \
---higress_route_rule higress.${DOMAIN}
+--higress_route_rule higress.${DOMAIN} \
 # --cri_provider docker \
 
 # 如果使用docker, 并且需要使用镜像服务器, 请重新执行↓, 否则跳过
