@@ -198,9 +198,11 @@ if [ "$clean_cri" != "false" ]; then
   sudo apt remove docker docker-engine docker.io containerd runc
   sudo rm -rf /etc/docker
   sudo rm -rf /var/lib/docker
+  sudo find / -name *docker* | xargs sudo rm -rf
   sudo rm -rf /etc/containerd
   sudo rm -rf /var/lib/containerd
   sudo rm -rf /run/containerd
+  sudo find / -name *containerd* | xargs sudo rm -rf
 fi
 
 
