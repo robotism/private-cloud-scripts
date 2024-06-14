@@ -261,7 +261,7 @@ do
     content > $hosts_path/hosts.toml
 done
 ls $config_path
-systemctl restart containerd
+systemctl restart containerd 2>/dev/null
 EOF
 bash $CONTAINERD_MIRRORS_SH
 rm -f $CONTAINERD_MIRRORS_SH
