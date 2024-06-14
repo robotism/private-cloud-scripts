@@ -235,6 +235,7 @@ ansible all -m raw -a "hostname"
 
 ```bash
 bash <(curl -s ${REPO}/install_k8s_core.sh) \
+--cri_provider docker \
 --master_ips ${K8S_MASTER_IPS:-""} \
 --node_ips ${K8S_NODE_IPS:-""} \
 --password ${K8S_SSH_PWD} \

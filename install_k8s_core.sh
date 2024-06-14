@@ -10,6 +10,9 @@ fi
 
 # sealos, k8s, helm, gateway-api, cilium, istio, openebs, cert-manager, higress
 
+cri_provider=`getarg cri_provider $@ 2>/dev/null`
+cri_provider=${cri_provider:-docker}
+
 
 ### 安装命令工具 Sealos
 install_sealos(){
@@ -26,8 +29,16 @@ install_k8s(){
   local password=$(getarg password $@)
   local masters=`getarg masters $@`
   local nodes=`getarg nodes $@`
+  
+  if [ "$cri_provider" = "containerd" ]; then
+  local k8s_image="kubernetes"
+  fi
+  if [ "$cri_provider" = "docker" ]; then
+  local k8s_image="kubernetes-docker"
+  fi
+  local k8s_image=${k8s_image:-"kubernetes"}
   if [ ! -n "`which kubectl`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubernetes:v1.27.14  --masters ${masters:-""} -p ${password}
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.15  --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
