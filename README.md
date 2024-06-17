@@ -95,12 +95,13 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 ```bash
 
 # 单独操作
-# bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}
+# bash <(curl -s ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}
 
 # 批量操作
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) --profile ${PROFILE:-release}"
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}"
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh)"
 
-ansible all -m raw -a "sleep 3s && reboot"
+# ansible all -m raw -a "sleep 3s && reboot"
 
 ansible all -m raw -a "hostname && docker ps"
 
@@ -204,10 +205,10 @@ ansible all -m raw -a "docker logs -n 10 traefik"
 
 ```bash
 # init master ------------------------
-bash <(curl -s ${REPO}/init_debian_docker.sh) \
+bash <(curl -s ${REPO}/init_debian_system.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
---install_docker false
+--clean_cri true \
 
 # init ansible  ------------------------
 bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
@@ -219,10 +220,10 @@ ansible all -m raw -a "mkdir -p ${TEMP}"
 ansible all -m raw -a "mkdir -p ${DATA}"
 
 # init all  ------------------------
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_system.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
---install_docker false \
+--clean_cri true \
 "
 # 本地k8s集群使用cri不需要安装docker
 
@@ -242,13 +243,12 @@ bash <(curl -s ${REPO}/install_k8s_core.sh) \
 --higress_route_rule higress.${DOMAIN} \
 # --cri_provider docker \
 
-# 如果使用docker, 并且需要使用镜像服务器, 请重新执行↓, 否则跳过
-# ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh) \
-# --profile ${PROFILE:-release} \
-# --sources ustc \
-# --clean_cri false \
-# --install_docker false \
-# "
+# 如果使用docker
+# ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh)"
+
+# 如果使用cointainer
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_containerd.sh)"
+
 ```
 
 
