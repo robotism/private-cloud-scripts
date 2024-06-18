@@ -24,7 +24,8 @@ export TEMP=/opt/tmp
 export DATA=/opt/data
 
 # 代理
-# export GHPROXY=https://ghproxy.org/
+export GHPROXY=https://ghproxy.org/
+export GHPROXY=https://gh-proxy.com/
 export GHPROXY=https://mirror.ghproxy.com/
 
 export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master

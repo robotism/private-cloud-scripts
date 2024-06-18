@@ -218,7 +218,7 @@ fi
 
 clean_cri=`getarg clean_cri $@`
 if [ "$clean_cri" == "true" ]; then
-  sudo apt remove docker docker-engine docker.io containerd runc
+  sudo apt remove docker docker-engine docker.io containerd runc 2>/dev/null
   sudo rm -rf /etc/docker
   sudo rm -rf /var/lib/docker
   sudo find / -name *docker* | xargs sudo rm -rf

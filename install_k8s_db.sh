@@ -19,6 +19,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 
 # https://github.com/labring-actions/cluster-image-docs/blob/main/docs/docker/apps.md
+
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kubeblocks
 install_kubeblocks(){
   if [ ! -n "`kubectl get po -A | grep kubeblocks`" ]; then
@@ -31,7 +32,10 @@ install_kubeblocks(){
 
 
 ## install tidb
+helm repo add pingcap https://charts.pingcap.org/
+
 kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-operator/v1.6.0/manifests/crd.yaml
+
 
 
 ## mysql7

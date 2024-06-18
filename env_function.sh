@@ -28,6 +28,7 @@ export bitnami_image_registry=${BITNAMI_REPO}
 export bitnami_image_registry=${bitnami_image_registry:-docker.io}
 export bitnami_image_repository=${bitnami_image_repository:-bitnami}
 
+
 export WORK_DIR=`pwd`
 
 getrelease(){

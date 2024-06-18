@@ -11,7 +11,7 @@ fi
 # sealos, k8s, helm, gateway-api, cilium, istio, openebs, cert-manager, higress
 
 cri_provider=`getarg cri_provider $@ 2>/dev/null`
-cri_provider=${cri_provider:-docker}
+cri_provider=${cri_provider:-containerd}
 
 
 ### 安装命令工具 Sealos
