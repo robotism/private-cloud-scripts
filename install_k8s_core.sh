@@ -36,9 +36,12 @@ install_k8s(){
   if [ "$cri_provider" = "docker" ]; then
   local k8s_image="kubernetes-docker"
   fi
+  if [ "$cri_provider" = "k3s" ]; then
+  local k8s_image="k3s"
+  fi
   local k8s_image=${k8s_image:-"kubernetes"}
   if [ ! -n "`which kubectl`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.15  --masters ${masters:-""} -p ${password}
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.14 --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
