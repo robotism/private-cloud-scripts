@@ -41,7 +41,7 @@ install_k8s(){
   fi
   local k8s_image=${k8s_image:-"kubernetes"}
   if [ ! -n "`which kubectl`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.14 --masters ${masters:-""} -p ${password}
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.16 --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
@@ -161,7 +161,7 @@ install_longhorn(){
 # https://github.com/labring-actions/cluster-image/blob/main/applications/cert-manager
 install_cert_manager(){
   if [ ! -n "`kubectl get po -A | grep 'cert-manager'`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.14.5
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.15.0
   kubectl -n cert-manager wait --for=condition=Ready pods --all
   fi
 }
@@ -229,7 +229,7 @@ install_higress(){
   echo "istio=${istio:-true}"
   echo "gateway=${gateway:-true}"
 
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v1.3.6 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v1.4.1 \
   -e HELM_OPTS=" \
   --set global.local=${local:-true} \
   --set global.ingressClass=higress \

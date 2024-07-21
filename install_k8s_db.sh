@@ -23,7 +23,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kubeblocks
 install_kubeblocks(){
   if [ ! -n "`kubectl get po -A | grep kubeblocks`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.8.3
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.9.0
   # kbcli kb upgrade --version 0.8.3
   # echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
   fi
