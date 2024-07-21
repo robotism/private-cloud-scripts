@@ -67,11 +67,9 @@ install_helm_charts(){
 
 # https://github.com/kubernetes-sigs/gateway-api/releases
 install_gateway_api(){
-  if [ ! -n "`kubectl get crd | grep 'gateways.gateway.networking.k8s.io'`" ]; then
   # Gateway API CRD 
   # kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
   kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/experimental-install.yaml
-  fi
 }
 
 # c
@@ -146,24 +144,18 @@ EOF
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/openebs
 install_openebs(){
-  if [ ! -n "`kubectl get po -A | grep 'openebs'`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/openebs:v3.10.0
-  fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/longhorn
 install_longhorn(){
-  if [ ! -n "`kubectl get po -A | grep 'longhorn'`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/longhorn:v1.6.1
-  fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/cert-manager
 install_cert_manager(){
-  if [ ! -n "`kubectl get po -A | grep 'cert-manager'`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.15.0
   kubectl -n cert-manager wait --for=condition=Ready pods --all
-  fi
 }
 
 
@@ -173,7 +165,7 @@ install_cert_manager(){
 # https://istio.io/latest/zh/docs/setup/additional-setup/config-profiles/
 install_istio(){
   local profile=`getarg profile $@`
-  if [ ! -n "`kubectl get po -A | grep 'istio'`" ]; then
+  
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/istio:v1.20.1 \
       -e ISTIOCTL_OPTS="--set profile=${profile:-minimal} -y"
   kubectl -n istio-system wait --for=condition=Ready pods --all
@@ -182,40 +174,32 @@ install_istio(){
   # istioctl dashboard controlz deployment/istiod.istio-system
   # kubectl get namespace -L istio-injection
   # kubectl get all -n istio-system
-  fi
+  
 }
 
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/metrics-server
 install_metrics_server(){
-  if [ ! -n "`kubectl get po -A | grep 'metrics-server'`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/metrics-server:v0.6.4
-  fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kube-state-metrics
 install_kube_state_metrics(){
-  if [ ! -n "`kubectl get po -A | grep 'kube-state-metrics'`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kube-state-metrics:v2.4.2
-  fi
 }
 
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/ingress-nginx
 install_ingress_nginx(){
   local host=`getarg host $@`
-  if [ ! -n "`kubectl get po -A | grep 'ingress-nginx'`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.9.4 \
   -e HELM_OPTS="--set controller.hostNetwork=${host:-true} --set controller.kind=DaemonSet --set controller.service.type=NodePort"
   # 使用宿主机网络, DaemonSet保证每个节点都可以接管流量, 使用NodePort暴露端口
   # 至此可以应用可以使用 ingressClass=ingress 暴露服务; 值得注意的是, 如果服务不可用,可能LoadBalancer不会分配ExternalIP
-  fi
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/higress
 install_higress(){
-
-  if [ ! -n "`kubectl get po -A | grep 'higress'`" ]; then 
 
   local local=`getarg local $@`
   local host=`getarg host $@`
@@ -248,7 +232,6 @@ install_higress(){
   kubectl -n higress-system wait --for=condition=Ready pods --all
   kubectl get po -n higress-system
   # kubectl port-forward service/higress-gateway -n higress-system 80:80 443:443
-  fi
 
 }
 
