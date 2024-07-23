@@ -25,8 +25,10 @@ fi
 [ ! -d "${config_path}" ] && mkdir -p ${config_path}
 # https://github.com/DaoCloud/public-image-mirror
 # https://github.com/kubesre/docker-registry-mirrors
-crmirrorhost1=kubesre.xyz
-crmirrorhost2=m.daocloud.io
+# crmirrorhost1=kubesre.xyz
+# crmirrorhost2=m.daocloud.io
+crmirrorhost1=busyproxy.com
+crmirrorhost2=kubesre.xyz
 params="${@:-\
 cr.l5d.io:l5d.${crmirrorhost1},l5d.${crmirrorhost2} \
 docker.elastic.co:elastic.${crmirrorhost1},elastic.${crmirrorhost2} \
