@@ -45,7 +45,6 @@ if [ "$mysql_version" = '5.7' ]; then
     --set image.tag=5.7.43-debian-11-r73 \
     --set global.storageClass=${storage_class} \
     --set auth.rootPassword=${password} \
-    --set auth.authenticationPolicy=replication \
     --set architecture=replication \
     -n ${namespace} --create-namespace
   # helm uninstall mysql -n ${namespace}
@@ -59,7 +58,6 @@ if [ "$mysql_version" != '5.7' ]; then
     --set image.registry=${bitnami_image_registry} \
     --set global.storageClass=${storage_class} \
     --set auth.rootPassword=${password} \
-    --set auth.authenticationPolicy=replication \
     --set architecture=replication \
     -n ${namespace} --create-namespace
   # helm uninstall mysql -n ${namespace}
