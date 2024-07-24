@@ -125,17 +125,17 @@ mkdir -p $ACME_CRON_DIR
 ACME_CRON_SH=$ACME_CRON_DIR/acme.cron.sh
 ACME_CRON_LOG=$ACME_CRON_DIR/acme.cron.log
 cat << EOF > $ACME_CRON_SH
-echo "####################################"
-echo "acme.sh exec @ $(date +%F) $(date +%T)" >> $ACME_CRON_LOG
+echo "##############################################################################"
+echo "acme.sh exec @ \$(date +%F) \$(date +%T)"
 export DP_ID=${DP_ID:-xxxxxx}               # 请按需替换
 export DP_KEY=${DP_KEY:-xxxxxxxxxxxxxxxx}   # 请按需替换
-bash <(curl -s ${REPO}/install_docker_acme.sh) \
---output ${TEMP}/acme.sh \
---dns dns_dp \
---apikey DP_Id=${DP_ID} \
---apisecret DP_Key=${DP_KEY} \
---domains ${DOMAIN},*.${DOMAIN} \
---server zerossl \
+bash <(curl -s ${REPO}/install_docker_acme.sh) \\
+--output ${TEMP}/acme.sh \\
+--dns dns_dp \\
+--apikey DP_Id=${DP_ID} \\
+--apisecret DP_Key=${DP_KEY} \\
+--domains ${DOMAIN},*.${DOMAIN} \\
+--server zerossl \\
 --daemon false
 ansible all -m raw -a "rm -rf ${DATA}/acme.sh"
 ansible all -m copy -a "src=${TEMP}/acme.sh dest=${DATA} force=yes"
@@ -152,7 +152,7 @@ echo "--------------------------------------------------------------------------
 echo ""
 bash $ACME_CRON_SH
 ansible localhost -m cron -a "name='acme.cron.sh' state=absent"
-ansible localhost -m cron -a "name='acme.cron.sh' job='bash $ACME_CRON_SH >> $ACME_CRON_LOG' month=*/1 day=1 hour=3 minute=0"
+ansible localhost -m cron -a "name='acme.cron.sh' job='bash $ACME_CRON_SH > $ACME_CRON_LOG' month=*/1 day=1 hour=3 minute=0"
 ansible localhost -m raw -a "crontab -l"
 
 # ansible localhost -m cron -a "name='test' state=absent"

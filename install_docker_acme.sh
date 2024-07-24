@@ -40,6 +40,7 @@ if [ ! -n "$domain" ]; then
 echo 'missing main domain => set a xx.xx as main domain'
 exit 0
 fi
+
 email=`getarg email $@`
 email=${email:-"webadmin@${domain}"}
 server=`getarg server $@`
