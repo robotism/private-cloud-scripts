@@ -244,7 +244,7 @@ install_higress_console(){
   --namespace higress-system \
   --ingress_class higress \
   --service_name $srv_name \
-  --service_port $src_port \
+  --service_port ${src_port:-8080} \
   --domain $higress_route_rule
 }
 
