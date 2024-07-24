@@ -7,6 +7,8 @@ else
 source ${REPO}/env_function.sh
 fi
 
+export crmirrorhost1=`getarg mirror1 $@`
+export crmirrorhost2=`getarg mirror2 $@`
 
 init_containerd_mirror=`getarg init_containerd_mirror $@`
 if [ "$init_containerd_mirror" != "false" ]; then
@@ -27,8 +29,8 @@ fi
 # https://github.com/kubesre/docker-registry-mirrors
 # crmirrorhost1=kubesre.xyz
 # crmirrorhost2=m.daocloud.io
-crmirrorhost1=busyproxy.com
-crmirrorhost2=kubesre.xyz
+crmirrorhost1=${crmirrorhost1:-noproxy.top}
+crmirrorhost2=${crmirrorhost2:-kubesre.xyz}
 params="${@:-\
 cr.l5d.io:l5d.${crmirrorhost1},l5d.${crmirrorhost2} \
 docker.elastic.co:elastic.${crmirrorhost1},elastic.${crmirrorhost2} \
