@@ -16,7 +16,7 @@
 >  </br>|==============================================================
 >  </br>
 
-## 设置环境变量
+## 🚀🚀🚀 设置环境变量 🚀🚀🚀
 
 ```bash
 
@@ -60,6 +60,7 @@ export K8S_SSH_PWD=xxxxxxxxxx
 ```
 
 ----
+
 ## git 代理
 
 ```bash
@@ -75,7 +76,7 @@ git config --global --unset https.proxy
 ```
 
 
-## 部署云服务器
+## 🚀🚀🚀 部署云服务器 🚀🚀🚀
 
 ### 一键初始化debian和ansbile集群
 
@@ -201,7 +202,7 @@ ansible all -m raw -a "docker logs -n 10 traefik"
 
 ---
 
-## 部署本地服务器
+## 🚀🚀🚀 部署本地服务器 🚀🚀🚀
 
 ### 一键初始化系统
 
