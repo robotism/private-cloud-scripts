@@ -40,15 +40,15 @@ kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-opera
 
 ## mysql7
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
-# helm upgrade --install mysql57 bitnami/mysql \
-#   --set image.registry=${bitnami_image_registry} \
-#   --set image.tag=5.7.43-debian-11-r73 \
-#   --set global.storageClass=${storage_class} \
-#   --set auth.rootPassword=${password} \
-#   --set auth.authenticationPolicy=replication \
-#   --set architecture=replication \
-#   -n ${namespace} --create-namespace
-# helm uninstall mysql -n ${namespace}
+helm upgrade --install mysql57 bitnami/mysql \
+  --set image.registry=${bitnami_image_registry} \
+  --set image.tag=5.7.43-debian-11-r73 \
+  --set global.storageClass=${storage_class} \
+  --set auth.rootPassword=${password} \
+  --set auth.authenticationPolicy=replication \
+  --set architecture=replication \
+  -n ${namespace} --create-namespace
+helm uninstall mysql57 -n ${namespace}
 
 
 ## mysql8
