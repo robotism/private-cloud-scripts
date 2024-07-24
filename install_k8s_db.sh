@@ -22,19 +22,16 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kubeblocks
 install_kubeblocks(){
-  if [ ! -n "`kubectl get po -A | grep kubeblocks`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.9.0
   # kbcli kb upgrade --version 0.8.3
   # echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
-  fi
 }
 # install_kubeblocks
 
 
 ## install tidb
-helm repo add pingcap https://charts.pingcap.org/
-
-kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-operator/v1.6.0/manifests/crd.yaml
+# helm repo add pingcap https://charts.pingcap.org/
+# kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-operator/v1.6.0/manifests/crd.yaml
 
 
 
@@ -60,7 +57,7 @@ helm upgrade --install mysql bitnami/mysql \
   --set auth.authenticationPolicy=replication \
   --set architecture=replication \
   -n ${namespace} --create-namespace
-helm uninstall mysql -n ${namespace}
+# helm uninstall mysql -n ${namespace}
 
 
 
@@ -78,7 +75,12 @@ helm uninstall mysql -n ${namespace}
 # helm uninstall postgresql -n ${namespace}
 
 
+
+
 ## install polardb-x/oceanbase
+
+
+
 
 
 ## install redis
