@@ -15,6 +15,8 @@ password=${password:-"Pa44VV0rd14VVrOng"}
 storage_class=`getarg storage_class $@  2>/dev/null`
 storage_class=${storage_class:-""}
 
+mysql_version=`getarg mysql_version $@  2>/dev/null`
+
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 
@@ -37,27 +39,31 @@ install_kubeblocks(){
 
 ## mysql7
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
+if [ "$mysql_version" = '5.7' ]; then
+  helm upgrade --install mysql bitnami/mysql \
+    --set image.registry=${bitnami_image_registry} \
+    --set image.tag=5.7.43-debian-11-r73 \
+    --set global.storageClass=${storage_class} \
+    --set auth.rootPassword=${password} \
+    --set auth.authenticationPolicy=replication \
+    --set architecture=replication \
+    -n ${namespace} --create-namespace
+  # helm uninstall mysql -n ${namespace}
+fi
+
+
+## mysql8
+# https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
+if [ "$mysql_version" != '5.7' ]; then
 # helm upgrade --install mysql bitnami/mysql \
 #   --set image.registry=${bitnami_image_registry} \
-#   --set image.tag=5.7.43-debian-11-r73 \
 #   --set global.storageClass=${storage_class} \
 #   --set auth.rootPassword=${password} \
 #   --set auth.authenticationPolicy=replication \
 #   --set architecture=replication \
 #   -n ${namespace} --create-namespace
 # helm uninstall mysql -n ${namespace}
-
-
-## mysql8
-# https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
-helm upgrade --install mysql bitnami/mysql \
-  --set image.registry=${bitnami_image_registry} \
-  --set global.storageClass=${storage_class} \
-  --set auth.rootPassword=${password} \
-  --set auth.authenticationPolicy=replication \
-  --set architecture=replication \
-  -n ${namespace} --create-namespace
-# helm uninstall mysql -n ${namespace}
+fi
 
 
 
