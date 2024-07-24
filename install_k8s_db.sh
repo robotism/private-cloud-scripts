@@ -55,14 +55,14 @@ fi
 ## mysql8
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
 if [ "$mysql_version" != '5.7' ]; then
-# helm upgrade --install mysql bitnami/mysql \
-#   --set image.registry=${bitnami_image_registry} \
-#   --set global.storageClass=${storage_class} \
-#   --set auth.rootPassword=${password} \
-#   --set auth.authenticationPolicy=replication \
-#   --set architecture=replication \
-#   -n ${namespace} --create-namespace
-# helm uninstall mysql -n ${namespace}
+  helm upgrade --install mysql bitnami/mysql \
+    --set image.registry=${bitnami_image_registry} \
+    --set global.storageClass=${storage_class} \
+    --set auth.rootPassword=${password} \
+    --set auth.authenticationPolicy=replication \
+    --set architecture=replication \
+    -n ${namespace} --create-namespace
+  # helm uninstall mysql -n ${namespace}
 fi
 
 
