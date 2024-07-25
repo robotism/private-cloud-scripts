@@ -28,6 +28,11 @@ web_provider=${web_provider:-ghost}
 web_route_rule=`getarg web_route_rule $@`
 web_route_rule=${web_route_rule:-'www.localhost'}
 
+
+kubectl create namespace $namespace
+
+
+
 #
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS halo;show databases;'

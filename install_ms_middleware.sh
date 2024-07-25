@@ -35,6 +35,12 @@ es_user=`getarg es_user $@ 2>/dev/null`
 es_password=`getarg es_password $@ 2>/dev/null`
 es_password=${es_password:-${password}}
 
+
+
+kubectl create namespace $namespace
+
+
+
 # install kt-connect
 # https://alibaba.github.io/kt-connect
 # .\ktctl.exe connect -c .\kubeconfig

@@ -26,6 +26,12 @@ db_namespace=`getarg db_namespace $@ 2>/dev/null`
 db_namespace=${db_namespace:-db-system}
 
 
+
+
+kubectl create namespace $namespace
+
+
+
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e "CREATE DATABASE IF NOT EXISTS waline;show databases;"
 # mysql -uroot -p${password} -e "alter user 'root'@'%' identified with mysql_native_password by '${password}';flush privileges;";
