@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
         - name: umami
-          image: docker.io/elestio/umami:latest
+          image: docker.io/umamisoftware/umami:mysql-latest
           ports:
             - name: umami
               containerPort: 3000
