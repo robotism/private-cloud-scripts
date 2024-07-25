@@ -34,6 +34,9 @@ show databases;\
 
 # https://stianlagstad.no/2022/08/deploy-umami-analytics-with-kubernetes/
 
+kubectl create namespace $namespace
+
+
 echo "
 kind: Deployment
 apiVersion: apps/v1
