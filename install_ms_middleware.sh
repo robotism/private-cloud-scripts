@@ -59,6 +59,15 @@ kubectl create namespace $namespace
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS dtm;show databases;'
 #
+
+
+kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
+mysql -uroot -p${password} -e '\
+CREATE DATABASE IF NOT EXISTS dtm;\
+show databases;\
+'"
+
+
 dtm_route_rule=`getarg dtm_route_rule $@ 2>/dev/null`
 dtm_route_rule=${dtm_route_rule:-'dtm.localhost'}
 git clone ${GHPROXY}https://github.com/dtm-labs/dtm 2>/dev/null

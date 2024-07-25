@@ -40,6 +40,14 @@ kubectl create namespace $namespace
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS drupal;show databases;'
 
+kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
+mysql -uroot -p${password} -e '\
+CREATE DATABASE IF NOT EXISTS halo;\
+CREATE DATABASE IF NOT EXISTS ghost;\
+CREATE DATABASE IF NOT EXISTS wordpress;\
+CREATE DATABASE IF NOT EXISTS drupal;\
+show databases;\
+'"
 
 
 if [ "$web_provider" = "halo" ]; then
