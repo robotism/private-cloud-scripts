@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
         - name: umami
-          image: docker.umami.dev/umami-software/umami:mysql-latest
+          image: docker.io/elestio/umami:latest
           ports:
             - name: umami
               containerPort: 3000
@@ -70,7 +70,7 @@ spec:
               value: \"1\"
             - name: DATABASE_URL
               value: \"mysql://root:${password}@mysql-primary.${db_namespace}.svc:3306/umami\"
-            - name: HASH_SALT
+            - name: APP_SECRET 
               value: \"$(pwgen 16 -n 1)\"
           readinessProbe:
             failureThreshold: 1
