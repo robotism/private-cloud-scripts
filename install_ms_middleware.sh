@@ -82,6 +82,10 @@ configuration: |-
     Port: 3306
     Db: 'dtm'
   TimeZoneOffset: '0'
+image:
+  repository: docker.io/yedf/dtm
+  tag: "latest"
+  pullPolicy: IfNotPresent
 " > dtm_values.yaml
 cat dtm_values.yaml
 helm uninstall dtm -n ${namespace} 
