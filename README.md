@@ -295,7 +295,6 @@ bash <(curl -s ${REPO}/install_k8s_rancher.sh) \
 ```bash
 bash <(curl -s ${REPO}/install_k8s_db.sh) \
 --ingress_class higress \
---mysql_version 5.7 \
 --password ${TOKEN}
 ```
 

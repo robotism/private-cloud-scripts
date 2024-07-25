@@ -43,6 +43,9 @@ es_password=${es_password:-${password}}
 # mysql -u $db_user -p $db_pwd -h $db_host < xx.sql
 # CREATE DATABASE IF NOT EXISTS ${spring.datasource.name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+
+
+
 #-----------------------------------------------------------------------------------------------
 # install dtm
 # init db: https://github.com/dtm-labs/dtm/blob/main/sqls/dtmsvr.storage.mysql.sql
@@ -78,6 +81,9 @@ helm upgrade --install dtm ./charts \
   -n ${namespace} --create-namespace 
 cd $WORK_DIR
 rm -rf dtm
+
+
+
 
 
 #-----------------------------------------------------------------------------------------------
