@@ -44,8 +44,9 @@ kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
 mysql -uroot -p${password} -e '\
 CREATE DATABASE IF NOT EXISTS halo;\
 CREATE DATABASE IF NOT EXISTS ghost;\
-CREATE DATABASE IF NOT EXISTS wordpress;\
 CREATE DATABASE IF NOT EXISTS drupal;\
+CREATE DATABASE IF NOT EXISTS wordpress;\
+CREATE DATABASE IF NOT EXISTS joomla;\
 show databases;\
 '"
 
@@ -175,6 +176,39 @@ srv_name=$(kubectl get service -n ${namespace} | grep wordpress | awk '{print $1
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
 --name wordpress \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${web_route_rule}
+# 如果出现 content mixed 问题 可以安装 ssl insecure content fixer 插件
+fi
+
+
+if [ "$web_provider" = "joomla" ]; then
+# 
+# https://github.com/bitnami/charts/blob/main/bitnami/joomla/values.yaml
+helm upgrade --install joomla bitnami/joomla \
+--set image.registry=${bitnami_image_registry} \
+--set image.repository=${bitnami_image_repository}/joomla \
+--set image.tag=latest \
+--set replicaCount=2 \
+--set mariadb.enabled=false \
+--set persistence.enabled=false \
+--set joomlaUsername=admin \
+--set joomlaPassword=${password} \
+--set service.type=ClusterIP \
+--set externalDatabase.host=mysql-primary.${db_namespace}.svc \
+--set externalDatabase.port=3306 \
+--set externalDatabase.user=root \
+--set externalDatabase.password=${password} \
+--set externalDatabase.database=joomla \
+-n ${namespace} --create-namespace
+#
+srv_name=$(kubectl get service -n ${namespace} | grep joomla | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
+install_ingress_rule \
+--name joomla \
 --namespace ${namespace} \
 --ingress_class ${ingress_class} \
 --service_name $srv_name \
