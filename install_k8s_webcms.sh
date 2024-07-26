@@ -149,7 +149,7 @@ fi
 
 
 
-if [ "$web_provider" = "wordpres" ]; then
+if [ "$web_provider" = "wordpress" ]; then
 # 
 # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
 helm upgrade --install wordpress bitnami/wordpress \
