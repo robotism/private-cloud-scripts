@@ -168,7 +168,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set externalDatabase.password=${password} \
 --set externalDatabase.database=wordpress \
 --set extraEnvVars[0].name=WP_AUTO_UPDATE_CORE \
---set extraEnvVars[0].value=true \
+--set-string extraEnvVars[0].value=true \
 -n ${namespace} --create-namespace
 #
 srv_name=$(kubectl get service -n ${namespace} | grep wordpress | awk '{print $1}')
