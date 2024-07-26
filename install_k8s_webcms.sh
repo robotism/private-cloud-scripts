@@ -33,20 +33,14 @@ kubectl create namespace $namespace
 
 
 
-#
+# 
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS halo;show databases;'
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS ghost;show databases;'
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS drupal;show databases;'
+# 
 
 kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
 mysql -uroot -p${password} -e '\
-CREATE DATABASE IF NOT EXISTS halo;\
-CREATE DATABASE IF NOT EXISTS ghost;\
-CREATE DATABASE IF NOT EXISTS drupal;\
-CREATE DATABASE IF NOT EXISTS wordpress;\
-CREATE DATABASE IF NOT EXISTS joomla;\
+CREATE DATABASE IF NOT EXISTS ${web_provider};\
 show databases;\
 '"
 
@@ -192,6 +186,7 @@ helm upgrade --install joomla bitnami/joomla \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/joomla \
 --set image.tag=latest \
+--set image.debug=true \
 --set replicaCount=2 \
 --set mariadb.enabled=false \
 --set persistence.enabled=false \
