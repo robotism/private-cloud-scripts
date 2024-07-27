@@ -17,6 +17,9 @@ storage_class=${storage_class:-""}
 
 mysql_version=`getarg mysql_version $@  2>/dev/null`
 
+kubectl create namespace $namespace
+
+
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
 
@@ -36,33 +39,28 @@ install_kubeblocks(){
 # kubectl create -f ${GHPROXY}https://raw.githubusercontent.com/pingcap/tidb-operator/v1.6.0/manifests/crd.yaml
 
 
+## install Percona XtraDB Cluster
+### https://docs.percona.com/percona-operator-for-mysql/pxc/helm.html#pre-requisites
+# helm repo add percona https://percona.github.io/percona-helm-charts/
+# helm repo update
+# helm install pxc-op percona/pxc-operator \
+#  --namespace $namespace
+# helm install pxc percona/pxc-db \
+#  --set proxysql.enabled=true \
+#  --set pxc.disableTLS=true \
+#  --set-string secrets.passwords.root=${password} \
+#  --namespace $namespace
 
-## mysql7
+## install mysql8
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
-if [ "$mysql_version" = '5.7' ]; then
-  helm upgrade --install mysql bitnami/mysql \
-    --set image.registry=${bitnami_image_registry} \
-    --set image.tag=5.7.43-debian-11-r73 \
-    --set global.storageClass=${storage_class} \
-    --set auth.rootPassword=${password} \
-    --set architecture=replication \
-    -n ${namespace} --create-namespace
-  # helm uninstall mysql -n ${namespace}
-fi
-
-
-## mysql8
-# https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
-if [ "$mysql_version" != '5.7' ]; then
-  helm upgrade --install mysql bitnami/mysql \
-    --set image.registry=${bitnami_image_registry} \
-    --set global.storageClass=${storage_class} \
-    --set auth.rootPassword=${password} \
-    --set architecture=replication \
-    -n ${namespace} --create-namespace
-  # helm uninstall mysql -n ${namespace}
-fi
-
+# https://github.com/percona/percona-helm-charts
+helm upgrade --install mysql bitnami/mysql \
+  --set image.registry=${bitnami_image_registry} \
+  --set global.storageClass=${storage_class} \
+  --set auth.rootPassword=${password} \
+  --set architecture=replication \
+  -n ${namespace} --create-namespace
+# helm uninstall mysql -n ${namespace}
 
 
 
