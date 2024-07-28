@@ -111,16 +111,80 @@ rm -rf dtm
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS dtm;show databases;'
 #
 
-helm install casdoor oci://registry-1.docker.io/casbin/casdoor-helm-charts --version 1.604.0
-helm upgrade --install  casdoor casdoor/casdoor-helm-charts \
-  --set image.repository=docker.io/casbin \
-  --set database.driver=mysql \
-  --set database.host=mysql-primary.${db_namespace}.svc \
-  --set database.port=3306 \
-  --set database.user=root \
-  --set database.password=${password} \
-  --set database.databaseName=casdoor \
-  -n ${namespace} --create-namespace
+
+# helm install casdoor oci://registry-1.docker.io/casbin/casdoor-helm-charts # --version v1.653.0
+# helm upgrade --install  casdoor casdoor/casdoor-helm-charts \
+#   --set image.repository=docker.io/casbin \
+#   --set database.driver=mysql \
+#   --set database.host=mysql-primary.${db_namespace}.svc \
+#   --set database.port=3306 \
+#   --set database.user=root \
+#   --set database.password=${password} \
+#   --set database.databaseName=casdoor \
+#   -n ${namespace} --create-namespace
+# srv_name=$(kubectl get service -n ${namespace} | grep casdoor | awk '{print $1}')
+# src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
+# install_ingress_rule \
+# --name casdoor \
+# --namespace ${namespace} \
+# --ingress_class ${ingress_class} \
+# --service_name $srv_name \
+# --service_port $src_port \
+# --domain ${casdoor_route_rule}
+# helm delete casdoor -n ${namespace} 
+echo "
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ${namespace:-default}
+  name: casdoor
+  labels:
+    app: casdoor
+spec:
+  type: NodePort
+  ports:
+    - port: 8000
+  selector:
+    app: casdoor
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ${namespace:-default}
+  name: casdoor-deployment
+  labels:
+    app: casdoor
+spec:
+  #EDIT IT: if you don't use redis, casdoor should not have multiple replicas
+  replicas: 1
+  selector:
+    matchLabels:
+      app: casdoor
+  template:
+    metadata:
+      labels:
+        app: casdoor
+    spec:
+      containers:
+        - name: casdoor-container
+          image: docker.io/casbin/casdoor:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - mountPath: /conf
+              name: conf
+          env:       
+            - name: RUNNING_IN_DOCKER
+              value: "true"
+      #if you want to deploy this in real prod env, consider the config map
+      volumes:
+        - name: conf
+          hostPath:
+            path: /conf
+
+" | kubectl apply -f -
+
 srv_name=$(kubectl get service -n ${namespace} | grep casdoor | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
@@ -130,7 +194,8 @@ install_ingress_rule \
 --service_name $srv_name \
 --service_port $src_port \
 --domain ${casdoor_route_rule}
-# helm delete casdoor -n ${namespace} 
+
+
 
 
 #-----------------------------------------------------------------------------------------------

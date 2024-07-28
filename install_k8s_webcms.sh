@@ -83,6 +83,7 @@ if [ "$web_provider" = "ghost" ]; then
 helm upgrade --install ghost bitnami/ghost \
 --set image.registry=${bitnami_image_registry} \
 --set image.tag=latest \
+--set image.debug=true \
 --set mysql.enabled=false \
 --set postgresql.enabled=false \
 --set replicaCount=2 \
@@ -115,6 +116,7 @@ if [ "$web_provider" = "drupal" ]; then
 helm upgrade --install drupal bitnami/drupal \
 --set image.registry=${bitnami_image_registry} \
 --set image.tag=latest \
+--set image.debug=true \
 --set mysql.enabled=false \
 --set mariadb.enabled=false \
 --set postgresql.enabled=false \
@@ -151,6 +153,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
 --set image.tag=latest \
+--set image.debug=true \
 --set replicaCount=2 \
 --set mariadb.enabled=false \
 --set persistence.enabled=false \
