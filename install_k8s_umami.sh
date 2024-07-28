@@ -31,7 +31,7 @@ runSql --sql "CREATE DATABASE IF NOT EXISTS umami;"
 
 # https://stianlagstad.no/2022/08/deploy-umami-analytics-with-kubernetes/
 
-kubectl create namespace $namespace 2>/dev/null`
+kubectl create namespace $namespace 2>/dev/null
 
 
 echo "

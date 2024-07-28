@@ -28,7 +28,7 @@ db_namespace=${db_namespace:-db-system}
 
 
 
-kubectl create namespace $namespace 2>/dev/null`
+kubectl create namespace $namespace 2>/dev/null
 
 
 

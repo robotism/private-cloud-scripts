@@ -37,7 +37,7 @@ es_password=${es_password:-${password}}
 
 
 
-kubectl create namespace $namespace 2>/dev/null`
+kubectl create namespace $namespace 2>/dev/null
 
 
 

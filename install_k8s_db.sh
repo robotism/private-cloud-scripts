@@ -17,7 +17,7 @@ storage_class=${storage_class:-""}
 
 mysql_version=`getarg mysql_version $@  2>/dev/null`
 
-kubectl create namespace $namespace 2>/dev/null`
+kubectl create namespace $namespace 2>/dev/null
 
 
 helm repo add bitnami https://charts.bitnami.com/bitnami

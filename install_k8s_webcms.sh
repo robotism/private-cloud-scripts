@@ -29,7 +29,7 @@ web_route_rule=`getarg web_route_rule $@`
 web_route_rule=${web_route_rule:-'www.localhost'}
 
 
-kubectl create namespace $namespace 2>/dev/null`
+kubectl create namespace $namespace 2>/dev/null
 
 
 
