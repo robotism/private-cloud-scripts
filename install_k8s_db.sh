@@ -26,12 +26,10 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 # https://github.com/labring-actions/cluster-image-docs/blob/main/docs/docker/apps.md
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kubeblocks
-install_kubeblocks(){
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.9.0
-  # kbcli kb upgrade --version 0.8.3
-  # echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
-}
-# install_kubeblocks
+
+sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.9.0
+# kbcli kb upgrade --version 0.8.3
+# echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
 
 
 ## install tidb
@@ -51,6 +49,7 @@ install_kubeblocks(){
 #  --set-string secrets.passwords.root=${password} \
 #  --namespace $namespace
 
+
 ## install mysql8
 # https://github.com/bitnami/charts/tree/main/bitnami/mysql/#installing-the-chart
 # https://github.com/percona/percona-helm-charts
@@ -65,7 +64,6 @@ helm upgrade --install mysql bitnami/mysql \
 
 
 
-
 ## install postgresql
 # https://github.com/bitnami/charts/tree/main/bitnami/postgresql/#installing-the-chart
 # helm upgrade --install postgresql bitnami/postgresql \
@@ -75,11 +73,6 @@ helm upgrade --install mysql bitnami/mysql \
 #   --set architecture=replication \
 #   -n ${namespace} --create-namespace
 # helm uninstall postgresql -n ${namespace}
-
-
-
-
-## install polardb-x/oceanbase
 
 
 

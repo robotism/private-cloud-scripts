@@ -367,5 +367,6 @@ bash <(curl -s ${REPO}/install_k8s_webcms.sh) \
 bash <(curl -s ${REPO}/install_ms_middleware.sh) \
 --ingress_class higress \
 --dtm_route_rule dtm.${DOMAIN} \
+--casdoor_route_rule casdoor.${DOMAIN} \
 --password ${TOKEN}
 ```

@@ -103,6 +103,34 @@ rm -rf dtm
 
 
 
+#-----------------------------------------------------------------------------------------------
+# install casdoor
+# init db: https://github.com/dtm-labs/dtm/blob/main/sqls/dtmsvr.storage.mysql.sql
+#
+# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS dtm;show databases;'
+#
+
+helm install casdoor oci://registry-1.docker.io/casbin/casdoor-helm-charts --version 1.604.0
+helm upgrade --install  casdoor casdoor/casdoor-helm-charts \
+  --set image.repository=docker.io/casbin \
+  --set database.driver=mysql \
+  --set database.host=mysql-primary.${db_namespace}.svc \
+  --set database.port=3306 \
+  --set database.user=root \
+  --set database.password=${password} \
+  --set database.databaseName=casdoor \
+  -n ${namespace} --create-namespace
+srv_name=$(kubectl get service -n ${namespace} | grep casdoor | awk '{print $1}')
+src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
+install_ingress_rule \
+--name joomla \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $src_port \
+--domain ${casdoor_route_rule}
+# helm delete casdoor -n ${namespace} 
 
 
 #-----------------------------------------------------------------------------------------------
