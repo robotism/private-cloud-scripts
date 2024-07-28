@@ -67,6 +67,12 @@ runSql(){
   else
   echo $sql > $file
   fi
+
+  echo "----------------------------------------------------------------"
+  echo $file
+  echo "----------------------------------------------------------------"
+  cat $file
+  echo "----------------------------------------------------------------"
   
   if [ $type = 'mysql' ]; then
   kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- \
@@ -74,7 +80,7 @@ runSql(){
     -h${DATABASE_HOST} \
     -P${DATABASE_PORT:-3306} \
     -u${DATABASE_USER:-root} \
-    -p${DATABASE_PASSWORD} \
+    -p${DATABASE_PASSWORD:-undefined} \
     < $file
   fi
 
