@@ -2,9 +2,9 @@
 
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
-source <(curl -s ${REPO}/env_function.sh) 
+source <(curl -s ${REPO}/env_k8sapp.sh) 
 else
-source ${REPO}/env_function.sh
+source ${REPO}/env_k8sapp.sh
 fi
 
 
@@ -61,11 +61,7 @@ kubectl create namespace $namespace
 #
 
 
-kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
-mysql -uroot -p${password} -e '\
-CREATE DATABASE IF NOT EXISTS dtm;\
-show databases;\
-'"
+runSql --sql ${GHPROXY} https://github.com/dtm-labs/dtm/blob/main/sqls/dtmsvr.storage.mysql.sql
 
 
 dtm_route_rule=`getarg dtm_route_rule $@ 2>/dev/null`

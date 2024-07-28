@@ -1,4 +1,4 @@
-# Scripts for privte k8s cloud deployment
+# Scripts for private k8s cloud deployment
 
 <div align="center">
   <img src="https://repobeats.axiom.co/api/embed/71d7d8852769ccece28efe0c10169fa107f7f6ac.svg">
@@ -156,6 +156,7 @@ ansible localhost -m cron -a "name='acme.cron.sh' state=absent"
 ansible localhost -m cron -a "name='acme.cron.sh' job='bash $ACME_CRON_SH > $ACME_CRON_LOG' month=*/1 day=1 hour=3 minute=0"
 ansible localhost -m raw -a "crontab -l"
 
+#
 # ansible localhost -m cron -a "name='test' state=absent"
 # ansible localhost -m cron -a "name='test' job='echo testing >> ~/test.log' minute=*/1" && tail -f ~/test.log
 # 
