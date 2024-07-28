@@ -2,9 +2,9 @@
 
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
-source <(curl -s ${REPO}/env_function.sh) 
+source <(curl -s ${REPO}/env_k8sapp.sh) 
 else
-source ${REPO}/env_function.sh
+source ${REPO}/env_k8sapp.sh
 fi
 
 #-----------------------------------------------------------------------------------------------
@@ -32,10 +32,8 @@ kubectl create namespace $namespace 2>/dev/null`
 
 
 
-# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e "CREATE DATABASE IF NOT EXISTS waline;show databases;"
-# mysql -uroot -p${password} -e "alter user 'root'@'%' identified with mysql_native_password by '${password}';flush privileges;";
-# 
+runSql --sql "CREATE DATABASE IF NOT EXISTS waline;"
+
 
 # https://waline.js.org/reference/server/env.html
 # https://waline.js.org/guide/database.html#mysql

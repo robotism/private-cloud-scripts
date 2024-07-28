@@ -35,8 +35,20 @@ export DATABASE_USER=${DATABASE_USER:-root}
 export DATABASE_PASSWORD=${DATABASE_PASSWORD:-${password}}
 
 
+# 
+# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
+# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
+# 
+# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
+# mysql -uroot -p${password} -e '\
+# CREATE DATABASE IF NOT EXISTS umami;\
+# show databases;\
+# '"
+
 runSql(){
   local sql=`getarg sql $@`
+  local type=`getarg type $@`
+  local type=${type:-$DATABASE_TYPE}
 
   local file="/tmp/.k8sapp.run.sql"
 
@@ -49,6 +61,7 @@ runSql(){
   echo $sql > $file
   fi
   
+  if [ type = 'mysql' ]
   kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- \
     mysql \
     -h${DATABASE_HOST} \
@@ -56,6 +69,7 @@ runSql(){
     -u${DATABASE_USER:-root} \
     -p${DATABASE_PASSWORD} \
     < $file
+  fi
 
   rm -rf $file
 }

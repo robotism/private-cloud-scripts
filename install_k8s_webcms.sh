@@ -2,9 +2,9 @@
 
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
-source <(curl -s ${REPO}/env_function.sh) 
+source <(curl -s ${REPO}/env_k8sapp.sh) 
 else
-source ${REPO}/env_function.sh
+source ${REPO}/env_k8sapp.sh
 fi
 
 
@@ -33,16 +33,7 @@ kubectl create namespace $namespace 2>/dev/null`
 
 
 
-# 
-# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
-# 
-
-kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
-mysql -uroot -p${password} -e '\
-CREATE DATABASE IF NOT EXISTS ${web_provider};\
-show databases;\
-'"
+runSql --sql "CREATE DATABASE IF NOT EXISTS ${web_provider};"
 
 
 if [ "$web_provider" = "halo" ]; then

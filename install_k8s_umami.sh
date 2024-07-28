@@ -2,9 +2,9 @@
 
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
-source <(curl -s ${REPO}/env_function.sh) 
+source <(curl -s ${REPO}/env_k8sapp.sh) 
 else
-source ${REPO}/env_function.sh
+source ${REPO}/env_k8sapp.sh
 fi
 
 #-----------------------------------------------------------------------------------------------
@@ -26,11 +26,8 @@ db_namespace=`getarg db_namespace $@ 2>/dev/null`
 db_namespace=${db_namespace:-db-system}
 
 
-kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
-mysql -uroot -p${password} -e '\
-CREATE DATABASE IF NOT EXISTS umami;\
-show databases;\
-'"
+runSql --sql "CREATE DATABASE IF NOT EXISTS umami;"
+
 
 # https://stianlagstad.no/2022/08/deploy-umami-analytics-with-kubernetes/
 
