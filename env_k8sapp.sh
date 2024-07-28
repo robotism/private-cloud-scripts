@@ -67,6 +67,7 @@ runSql(){
   else
   echo $sql > $file
   fi
+  echo "show databases;" >> $file
 
   echo "----------------------------------------------------------------"
   echo $file
