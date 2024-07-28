@@ -106,11 +106,12 @@ rm -rf dtm
 #-----------------------------------------------------------------------------------------------
 # install casdoor
 # init db: https://github.com/dtm-labs/dtm/blob/main/sqls/dtmsvr.storage.mysql.sql
-#
-# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS dtm;show databases;'
-#
 
+kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
+mysql -uroot -p${password} -e '\
+CREATE DATABASE IF NOT EXISTS casdoor;\
+show databases;\
+'"
 
 # helm install casdoor oci://registry-1.docker.io/casbin/casdoor-helm-charts # --version v1.653.0
 # helm upgrade --install  casdoor casdoor/casdoor-helm-charts \
