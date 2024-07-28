@@ -45,22 +45,10 @@ kubectl create namespace $namespace 2>/dev/null`
 # https://alibaba.github.io/kt-connect
 # .\ktctl.exe connect -c .\kubeconfig
 
-# 
-# mysql -u $db_user -p $db_pwd -h $db_host < xx.sql
-# CREATE DATABASE IF NOT EXISTS ${spring.datasource.name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-
-
 
 #-----------------------------------------------------------------------------------------------
 # install dtm
 # init db: https://github.com/dtm-labs/dtm/blob/main/sqls/dtmsvr.storage.mysql.sql
-#
-# kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
-# mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS dtm;show databases;'
-#
-
-
 runSql --sql ${GHPROXY}https://raw.githubusercontent.com/dtm-labs/dtm/main/sqls/dtmsvr.storage.mysql.sql
 
 

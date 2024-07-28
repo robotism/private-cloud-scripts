@@ -39,11 +39,18 @@ export DATABASE_PASSWORD=${DATABASE_PASSWORD:-${password}}
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "(bash || ash || sh)"
 # mysql -uroot -p${password} -e 'CREATE DATABASE IF NOT EXISTS wordpress;show databases;'
 # 
+
 # kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- sh -c "\
 # mysql -uroot -p${password} -e '\
 # CREATE DATABASE IF NOT EXISTS umami;\
 # show databases;\
 # '"
+# 
+
+# mysql -u $db_user -p $db_pwd -h $db_host < xx.sql
+# CREATE DATABASE IF NOT EXISTS ${spring.datasource.name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
 
 runSql(){
   local sql=`getarg sql $@`
