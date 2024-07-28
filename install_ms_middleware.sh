@@ -124,7 +124,7 @@ helm upgrade --install  casdoor casdoor/casdoor-helm-charts \
 srv_name=$(kubectl get service -n ${namespace} | grep casdoor | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
 install_ingress_rule \
---name joomla \
+--name casdoor \
 --namespace ${namespace} \
 --ingress_class ${ingress_class} \
 --service_name $srv_name \
