@@ -181,7 +181,7 @@ spec:
             - name: driverName
               value: "mysql"
             - name: dataSourceName
-              value: "user:${password}@tcp(mysql-primary.${db_namespace}.svc:3306)/"
+              value: "user:${password}@tcp\(mysql-primary.${db_namespace}.svc:3306\)/"
       #if you want to deploy this in real prod env, consider the config map
       volumes:
         - name: conf
