@@ -34,7 +34,7 @@ show databases;\
 
 # https://stianlagstad.no/2022/08/deploy-umami-analytics-with-kubernetes/
 
-kubectl create namespace $namespace
+kubectl create namespace $namespace 2>/dev/null`
 
 
 echo "

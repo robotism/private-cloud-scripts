@@ -37,7 +37,7 @@ es_password=${es_password:-${password}}
 
 
 
-kubectl create namespace $namespace
+kubectl create namespace $namespace 2>/dev/null`
 
 
 
@@ -61,7 +61,7 @@ kubectl create namespace $namespace
 #
 
 
-runSql --sql ${GHPROXY} https://github.com/dtm-labs/dtm/blob/main/sqls/dtmsvr.storage.mysql.sql
+runSql --sql ${GHPROXY}https://raw.githubusercontent.com/dtm-labs/dtm/main/sqls/dtmsvr.storage.mysql.sql
 
 
 dtm_route_rule=`getarg dtm_route_rule $@ 2>/dev/null`
