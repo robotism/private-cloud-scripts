@@ -68,7 +68,7 @@ runSql(){
   echo $sql > $file
   fi
   
-  if [ type = 'mysql' ]
+  if [ $type = 'mysql' ]; then
   kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- \
     mysql \
     -h${DATABASE_HOST} \
