@@ -54,8 +54,6 @@ export DATABASE_PASSWORD=${DATABASE_PASSWORD:-${password}}
 
 runSql(){
   local sql=`getarg sql $@`
-  local type=`getarg type $@`
-  local type=${type:-$DATABASE_TYPE}
 
   local file="/tmp/.k8sapp.run.sql"
 
@@ -74,7 +72,7 @@ runSql(){
   cat $file
   echo "----------------------------------------------------------------"
   
-  if [ $type = 'mysql' ]; then
+  # if [ $type = 'mysql' ]; then
   kubectl exec -i -t -n ${db_namespace} mysql-primary-0 -c mysql -- \
     mysql \
     -h${DATABASE_HOST} \
@@ -82,7 +80,7 @@ runSql(){
     -u${DATABASE_USER:-root} \
     -p${DATABASE_PASSWORD:-undefined} \
     < $file
-  fi
+  # fi
 
   rm -rf $file
 }
