@@ -46,11 +46,11 @@ helm upgrade --install halo halo/halo \
 --set replicaCount=2 \
 --set haloUsername=admin \
 --set haloPassword=${password} \
---set externalDatabase.platform=mysql \
---set externalDatabase.host=mysql-primary.${db_namespace}.svc \
---set externalDatabase.port=3306 \
---set externalDatabase.user=root \
---set externalDatabase.password=${password} \
+--set externalDatabase.platform=${DATABASE_TYPE} \
+--set externalDatabase.host=${DATABASE_HOST} \
+--set externalDatabase.port=${DATABASE_PORT} \
+--set externalDatabase.user=${DATABASE_USER} \
+--set externalDatabase.password=${DATABASE_PASSWORD} \
 --set externalDatabase.database=halo \
 -n ${namespace} --create-namespace
 #
@@ -81,11 +81,11 @@ helm upgrade --install ghost bitnami/ghost \
 --set ghostUsername=admin \
 --set ghostPassword=${password} \
 --set service.type=ClusterIP \
---set externalDatabase.platform=mysql \
---set externalDatabase.host=mysql-primary.${db_namespace}.svc \
---set externalDatabase.port=3306 \
---set externalDatabase.user=root \
---set externalDatabase.password=${password} \
+--set externalDatabase.platform=${DATABASE_TYPE} \
+--set externalDatabase.host=${DATABASE_HOST} \
+--set externalDatabase.port=${DATABASE_PORT} \
+--set externalDatabase.user=${DATABASE_USER} \
+--set externalDatabase.password=${DATABASE_PASSWORD} \
 --set externalDatabase.database=ghost \
 -n ${namespace} --create-namespace
 #
@@ -115,10 +115,11 @@ helm upgrade --install drupal bitnami/drupal \
 --set drupalUsername=admin \
 --set drupalPassword=${password} \
 --set service.type=ClusterIP \
---set externalDatabase.host=mysql-primary.${db_namespace}.svc \
---set externalDatabase.port=3306 \
---set externalDatabase.user=root \
---set externalDatabase.password=${password} \
+--set externalDatabase.platform=${DATABASE_TYPE} \
+--set externalDatabase.host=${DATABASE_HOST} \
+--set externalDatabase.port=${DATABASE_PORT} \
+--set externalDatabase.user=${DATABASE_USER} \
+--set externalDatabase.password=${DATABASE_PASSWORD} \
 --set externalDatabase.database=drupal \
 --set allowEmptyPassword=false \
 -n ${namespace} --create-namespace
@@ -152,9 +153,11 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set wordpressPassword=${password} \
 --set wordpressScheme=http \
 --set service.type=ClusterIP \
---set externalDatabase.host=mysql-primary.${db_namespace}.svc \
---set externalDatabase.user=root \
---set externalDatabase.password=${password} \
+--set externalDatabase.platform=${DATABASE_TYPE} \
+--set externalDatabase.host=${DATABASE_HOST} \
+--set externalDatabase.port=${DATABASE_PORT} \
+--set externalDatabase.user=${DATABASE_USER} \
+--set externalDatabase.password=${DATABASE_PASSWORD} \
 --set externalDatabase.database=wordpress \
 --set extraEnvVars[0].name=WP_AUTO_UPDATE_CORE \
 --set-string extraEnvVars[0].value=true \
@@ -187,10 +190,11 @@ helm upgrade --install joomla bitnami/joomla \
 --set joomlaUsername=admin \
 --set joomlaPassword=${password} \
 --set service.type=ClusterIP \
---set externalDatabase.host=mysql-primary.${db_namespace}.svc \
---set externalDatabase.port=3306 \
---set externalDatabase.user=root \
---set externalDatabase.password=${password} \
+--set externalDatabase.platform=${DATABASE_TYPE} \
+--set externalDatabase.host=${DATABASE_HOST} \
+--set externalDatabase.port=${DATABASE_PORT} \
+--set externalDatabase.user=${DATABASE_USER} \
+--set externalDatabase.password=${DATABASE_PASSWORD} \
 --set externalDatabase.database=joomla \
 -n ${namespace} --create-namespace
 #

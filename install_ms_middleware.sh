@@ -59,11 +59,11 @@ cd dtm
 echo "
 configuration: |-
   Store:
-    Driver: 'mysql'
-    Host: 'mysql-primary.${db_namespace}.svc'
-    User: 'root'
-    Password: '${password}'
-    Port: 3306
+    Driver: '${DATABASE_TYPE}'
+    Host: '${DATABASE_HOST}'
+    User: '${DATABASE_USER}'
+    Password: '${DATABASE_PASSWORD}'
+    Port: ${DATABASE_PORT}
     Db: 'dtm'
   TimeZoneOffset: '0'
 image:

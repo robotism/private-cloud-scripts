@@ -66,7 +66,7 @@ spec:
             - name: DISABLE_UPDATES
               value: \"1\"
             - name: DATABASE_URL
-              value: \"mysql://root:${password}@mysql-primary.${db_namespace}.svc:3306/umami\"
+              value: \"mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/umami\"
             - name: APP_SECRET 
               value: \"$(pwgen 16 -n 1)\"
           readinessProbe:

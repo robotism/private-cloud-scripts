@@ -67,13 +67,13 @@ spec:
             - name: MYSQL_DB
               value: \"waline\"
             - name: MYSQL_USER
-              value: \"root\"
+              value: \"${DATABASE_USER}\"
             - name: MYSQL_PASSWORD
-              value: \"${password}\"
+              value: \"${DATABASE_PASSWORD}\"
             - name: MYSQL_HOST
-              value: \"mysql-primary.${db_namespace}.svc\"
+              value: \"${DATABASE_HOST}\"
             - name: MYSQL_PORT
-              value: \"3306\"
+              value: \"${DATABASE_PORT}\"
           readinessProbe:
             failureThreshold: 1
             httpGet:
