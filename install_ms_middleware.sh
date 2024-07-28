@@ -175,9 +175,7 @@ spec:
           volumeMounts:
             - mountPath: /conf
               name: conf
-          env:       
-            - name: RUNNING_IN_DOCKER
-              value: "true"
+          env:
             - name: driverName
               value: "mysql"
             - name: dataSourceName
