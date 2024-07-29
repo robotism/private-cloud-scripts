@@ -27,7 +27,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kubeblocks
 
-sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.9.0
+# sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/kubeblocks:v0.9.0
 # kbcli kb upgrade --version 0.8.3
 # echo "uninstall-kubeblocks" | kbcli kubeblocks uninstall
 
@@ -57,6 +57,7 @@ helm upgrade --install mysql bitnami/mysql \
   --set image.registry=${bitnami_image_registry} \
   --set global.storageClass=${storage_class} \
   --set auth.rootPassword=${password} \
+  --set auth.authenticationPolicy="* \,\," \
   --set architecture=replication \
   -n ${namespace} --create-namespace
 # helm uninstall mysql -n ${namespace}

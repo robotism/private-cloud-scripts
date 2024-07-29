@@ -141,11 +141,6 @@ fi
 if [ "$web_provider" = "wordpress" ]; then
 # 
 # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
-echo "
-wordpressExtraConfigContent: |-
-  define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
-" > wordpress_values.yaml
-cat wordpress_values.yaml
 helm upgrade --install wordpress bitnami/wordpress \
 --set image.registry=${bitnami_image_registry} \
 --set image.repository=${bitnami_image_repository}/wordpress \
@@ -157,6 +152,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set wordpressUsername=admin \
 --set wordpressPassword=${password} \
 --set wordpressScheme=http \
+--set wordpressExtraConfigContent="define('MYSQL_CLIENT_FLAGS'\, MYSQLI_CLIENT_SSL);" \
 --set service.type=ClusterIP \
 --set externalDatabase.platform=${DATABASE_TYPE} \
 --set externalDatabase.host=${DATABASE_HOST} \
@@ -166,9 +162,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set externalDatabase.database=wordpress \
 --set extraEnvVars[0].name=WP_AUTO_UPDATE_CORE \
 --set-string extraEnvVars[0].value=true \
-  --values wordpress_values.yaml \
 -n ${namespace} --create-namespace
-rm -rf wordpress_values.yaml
 #
 srv_name=$(kubectl get service -n ${namespace} | grep wordpress | awk '{print $1}')
 src_port=$(kubectl get services -n ${namespace} $srv_name -o jsonpath="{.spec.ports[0].port}")
