@@ -152,7 +152,7 @@ helm upgrade --install wordpress bitnami/wordpress \
 --set wordpressUsername=admin \
 --set wordpressPassword=${password} \
 --set wordpressScheme=http \
---set-string wordpressExtraConfigContent="define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);" \
+--set-string wordpressExtraConfigContent="define('MYSQL_CLIENT_FLAGS',MYSQLI_CLIENT_SSL);" \
 --set service.type=ClusterIP \
 --set externalDatabase.platform=${DATABASE_TYPE} \
 --set externalDatabase.host=${DATABASE_HOST} \
