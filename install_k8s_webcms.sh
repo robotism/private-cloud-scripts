@@ -143,7 +143,7 @@ if [ "$web_provider" = "wordpress" ]; then
 # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
 echo "
 wordpressExtraConfigContent: |-
-  define('MYSQL_CLIENT_FLAGS','MYSQLI_CLIENT_SSL');
+  define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
 " > wordpress_values.yaml
 cat wordpress_values.yaml
 helm upgrade --install wordpress bitnami/wordpress \
