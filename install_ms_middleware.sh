@@ -82,6 +82,7 @@ helm upgrade --install dtm ./charts \
   --set ingress.hosts[0].paths[0].pathType=Prefix \
   --values dtm_values.yaml \
   -n ${namespace} --create-namespace 
+rm -rf dtm_values.yaml
 cd $WORK_DIR
 rm -rf dtm
 
