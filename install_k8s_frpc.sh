@@ -116,7 +116,7 @@ spec:
     spec:
       containers:
         - name: ${name}
-          image: snowdreamtech/frpc:0.59.0
+          image: docker.io/snowdreamtech/frpc:0.59.0
           volumeMounts:
             - name: config
               mountPath: "/etc/frp"
