@@ -20,6 +20,8 @@ tls=${tls:-true}
 token=$(getarg token $@)
 token=${token:-Pa44VV0rd14VVrOng}
 
+network=$(getarg network $@)
+
 http_route_rule=$(getarg http_route_rule $@)
 http_route_rule=${http_route_rule:-Host\(\`localhost\`\)}
 
@@ -78,6 +80,7 @@ docker rm -f $CONTAINER_NAME 2>/dev/null
 docker run -dit \
   --restart=always \
   --privileged \
+  --network=${network:-bridge} \
   -p ${port_bind}:${port_bind} \
   -v ${datadir}/${FRPS_CONFIG}:/etc/frp/${FRPS_CONFIG} \
   -l traefik.enable=true \
