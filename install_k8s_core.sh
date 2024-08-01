@@ -16,7 +16,7 @@ cri_provider=${cri_provider:-containerd}
 
 ### 安装命令工具 Sealos
 install_sealos(){
-  if [ ! -n "`which sealos`" ]; then
+  if [ ! -n "`which sealos 2>/dev/null`" ]; then
     echo "deb [trusted=yes] https://apt.fury.io/labring/ /" | sudo tee /etc/apt/sources.list.d/labring.list
     sudo apt update
     sudo apt install sealos --fix-missing
@@ -40,7 +40,7 @@ install_k8s(){
   local k8s_image="k3s"
   fi
   local k8s_image=${k8s_image:-"kubernetes"}
-  if [ ! -n "`which kubectl`" ]; then
+  if [ ! -n "`which kubectl 2>/dev/null`" ]; then
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.16 --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then

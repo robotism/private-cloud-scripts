@@ -9,7 +9,7 @@ fi
 
 # debian
 
-if [ ! -n "`which apt`" ]; then
+if [ ! -n "`which apt 2>/dev/null`" ]; then
 echo "missing apt"
 exit 0
 fi
@@ -57,7 +57,7 @@ if [ ! -f "/usr/bin/dnf" ];then
   sudo apt install -y dnf
 fi
 
-if [ ! -n "`which snapd`" ]; then
+if [ ! -n "`which snapd 2>/dev/null`" ]; then
 
     sudo apt -y install snapd
 
@@ -197,20 +197,20 @@ sysctl --system
 
 # ntp
 
-if [ ! -n "`which ntpd`" ]; then
+if [ ! -n "`which ntpd 2>/dev/null`" ]; then
   apt install -y ntp ntpdate ntpstat 
   sudo systemctl start ntpd.service
   sudo systemctl enable ntpd.service
   sudo systemctl status ntpd.service
 fi
 
-if [ ! -n "`which irqbalance`" ]; then
+if [ ! -n "`which irqbalance 2>/dev/null`" ]; then
   sudo apt install -y irqbalance
   sudo systemctl enable irqbalance
   sudo systemctl start irqbalance
 fi
 
-if [ ! -n "`which cpupower`" ]; then
+if [ ! -n "`which cpupower 2>/dev/null`" ]; then
   sudo apt install -y linux-cpupower
   sudo cpupower frequency-set --governor performance
 fi

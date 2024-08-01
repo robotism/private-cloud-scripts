@@ -13,11 +13,11 @@ echo "missing apt/yum"
 exit
 fi
 
-if [ ! -n "`which sshpass`" ]; then
+if [ ! -n "`which sshpass 2>/dev/null`" ]; then
 eval $PM install -y sshpass
 fi
 
-if [ ! -n "`which ansible`" ]; then
+if [ ! -n "`which ansible 2>/dev/null`" ]; then
 eval $PM install -y ansible
 fi
 

@@ -12,11 +12,11 @@
 [ "$debug" == "true" -o "$debug" == "yes" ] && set -x
 [ "$DEBUG" == "true" -o "$DEBUG" == "yes" ] && set -x
 
-if [ -n "`which yum`" ]; then
+if [ -n "`which yum 2>/dev/null`" ]; then
 export PM=yum
 fi
 
-if [ -n "`which apt`" ]; then
+if [ -n "`which apt 2>/dev/null`" ]; then
 export PM=apt
 fi
 

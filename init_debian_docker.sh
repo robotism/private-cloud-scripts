@@ -10,12 +10,12 @@ fi
 
 
 # 安装docker
-if [ ! -n "`which docker`" ]; then
+if [ ! -n "`which docker 2>/dev/null`" ]; then
   # curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
   sudo dnf install docker-ce --nobest
 fi
 # 安装docker-compose
-if [ ! -n "`which docker-compose`" ]; then
+if [ ! -n "`which docker-compose 2>/dev/null`" ]; then
   dnf -y install docker-compose-plugin
   DOCKER_COMPOSE=$(find / -name docker-compose | grep "docker" 2>/dev/null)
   echo $DOCKER_COMPOSE
