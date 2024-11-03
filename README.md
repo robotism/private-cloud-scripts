@@ -139,7 +139,7 @@ bash <(curl -Ls ${REPO}/install_docker_acme.sh) \\
 --daemon false
 ansible all -m raw -a "rm -rf ${DATA}/acme.sh"
 ansible all -m copy -a "src=${TEMP}/acme.sh dest=${DATA} force=yes"
-ansible all -m raw -a "ls ${DATA}/acme.sh"
+ansible all -m raw -a "ls -al ${DATA}/acme.sh"
 ansible all -m raw -a "docker restart traefik 2>/dev/null"
 EOF
 chmod +x $ACME_CRON_SH
@@ -152,7 +152,7 @@ echo "--------------------------------------------------------------------------
 echo ""
 bash $ACME_CRON_SH
 ansible localhost -m cron -a "name='acme.cron.sh' state=absent"
-ansible localhost -m cron -a "name='acme.cron.sh' job='bash $ACME_CRON_SH > $ACME_CRON_LOG' month=*/1 day=1 hour=3 minute=0"
+ansible localhost -m cron -a "name='acme.cron.sh' job='bash $ACME_CRON_SH > $ACME_CRON_LOG' day=*/7 hour=3 minute=0"
 ansible localhost -m raw -a "crontab -l"
 
 #
