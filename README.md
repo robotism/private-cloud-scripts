@@ -24,9 +24,8 @@ export TEMP=/opt/tmp
 export DATA=/opt/data
 
 # 代理
-export GHPROXY=https://ghproxy.org/
 export GHPROXY=https://gh-proxy.com/
-export GHPROXY=https://mirror.ghproxy.com/
+export GHPROXY=https://ghp.ci/
 
 export REPO=${GHPROXY}https://raw.githubusercontent.com/robotism/private-cloud-scripts/master
 export SCRIPTS_REPO=${SCRIPTS_REPO}
@@ -82,7 +81,7 @@ git config --global --unset https.proxy
 
 ```bash
 
-bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
+bash <(curl -Ls ${REPO}/init_ansible_cluster.sh) \
 --hostname cloud-node- \
 --ips $CLOUD_IPS \
 --password ${CLOUD_SSH_PWD}
@@ -98,11 +97,11 @@ ansible all -m raw -a "mkdir -p ${DATA}"
 ```bash
 
 # 单独操作
-# bash <(curl -s ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}
+# bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}
 
 # 批量操作
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}"
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh)"
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}"
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_docker.sh)"
 
 # ansible all -m raw -a "sleep 3s && reboot"
 
@@ -130,7 +129,7 @@ echo "##########################################################################
 echo "acme.sh exec @ \$(date +%F) \$(date +%T)"
 export DP_ID=${DP_ID:-xxxxxx}               # 请按需替换
 export DP_KEY=${DP_KEY:-xxxxxxxxxxxxxxxx}   # 请按需替换
-bash <(curl -s ${REPO}/install_docker_acme.sh) \\
+bash <(curl -Ls ${REPO}/install_docker_acme.sh) \\
 --output ${TEMP}/acme.sh \\
 --dns dns_dp \\
 --apikey DP_Id=${DP_ID} \\
@@ -169,7 +168,7 @@ ansible localhost -m raw -a "crontab -l"
 ```bash
 
 ansible all -m raw -a "${ANSIBLE_VARS} \
-bash <(curl -s ${REPO}/install_docker_traefik.sh) \
+bash <(curl -Ls ${REPO}/install_docker_traefik.sh) \
 --datadir ${DATA}/traefik \
 --acmedir ${DATA}/acme.sh \
 --route_rule 'HostRegexp(\`.*\`)' \
@@ -188,7 +187,7 @@ ansible all -m raw -a "docker logs -n 10 traefik"
 ```bash
 
 ansible all -m raw -a "${ANSIBLE_VARS} \
-bash <(curl -s ${REPO}/install_docker_frps.sh) \
+bash <(curl -Ls ${REPO}/install_docker_frps.sh) \
 --datadir ${DATA}/frp \
 --http_route_rule 'HostRegexp(\`.*\`)&&!HostRegexp(\`^(traefik|frps|tcp)\`)' \
 --tcp_route_rule 'HostSNIRegexp(\`^tcp-.*.${DOMAIN}\`)' \
@@ -209,13 +208,13 @@ ansible all -m raw -a "docker logs -n 10 traefik"
 
 ```bash
 # init master ------------------------
-bash <(curl -s ${REPO}/init_debian_system.sh) \
+bash <(curl -Ls ${REPO}/init_debian_system.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
 --clean_cri true \
 
 # init ansible  ------------------------
-bash <(curl -s ${REPO}/init_ansible_cluster.sh) \
+bash <(curl -Ls ${REPO}/init_ansible_cluster.sh) \
 --hostname k8s-node \
 --ips ${K8S_MASTER_IPS},${K8S_NODE_IPS} \
 --password ${K8S_SSH_PWD}
@@ -224,7 +223,7 @@ ansible all -m raw -a "mkdir -p ${TEMP}"
 ansible all -m raw -a "mkdir -p ${DATA}"
 
 # init all  ------------------------
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_system.sh) \
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_system.sh) \
 --profile ${PROFILE:-release} \
 --sources ustc \
 --clean_cri true \
@@ -239,7 +238,7 @@ ansible all -m raw -a "hostname"
 ### 一键初始化 k8s集群(sealos)
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_core.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_core.sh) \
 --master_ips ${K8S_MASTER_IPS:-""} \
 --node_ips ${K8S_NODE_IPS:-""} \
 --password ${K8S_SSH_PWD} \
@@ -248,10 +247,10 @@ bash <(curl -s ${REPO}/install_k8s_core.sh) \
 # --cri_provider docker \
 
 # 如果使用docker
-# ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_docker.sh)"
+# ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_docker.sh)"
 
 # 如果使用cointainer
-ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_containerd.sh) \
+ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_containerd.sh) \
 -- mirror1 noproxy.top
 "
 
@@ -261,7 +260,7 @@ ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -s ${REPO}/init_debian_contai
 ### 一键部署 frpc
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_frpc.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_frpc.sh) \
 --bind_ips ${CLOUD_IPS} \
 --http_upstream_host higress-gateway.higress-system.svc.cluster.local \
 --http_upstream_port 80 \
@@ -271,7 +270,7 @@ bash <(curl -s ${REPO}/install_k8s_frpc.sh) \
 
 ### 一键部署 ddns
 ```bash
-bash <(curl -s ${REPO}/install_k8s_ddns.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_ddns.sh) \
 --ingress_class higress \
 --dns dnspod \
 --apikey ${DP_ID} \
@@ -285,7 +284,7 @@ bash <(curl -s ${REPO}/install_k8s_ddns.sh) \
 ### 一键部署 rancher
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_rancher.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_rancher.sh) \
 --rancher_route_rule rancher.${DOMAIN} \
 --ingress_class higress \
 --password ${TOKEN}
@@ -294,7 +293,7 @@ bash <(curl -s ${REPO}/install_k8s_rancher.sh) \
 ### 一键部署 db
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_db.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_db.sh) \
 --ingress_class higress \
 --password ${TOKEN}
 ```
@@ -302,7 +301,7 @@ bash <(curl -s ${REPO}/install_k8s_db.sh) \
 ### 一键部署 mq
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_mq.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_mq.sh) \
 --ingress_class higress \
 --rabbitmq_route_rule rabbitmq.${DOMAIN} \
 --rocketmq_route_rule rocketmq.${DOMAIN} \
@@ -313,7 +312,7 @@ bash <(curl -s ${REPO}/install_k8s_mq.sh) \
 ### 一键部署 monitor
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_monitor.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_monitor.sh) \
 --ingress_class higress \
 --kibana_route_rule kibana.${DOMAIN} \
 --grafana_route_rule grafana.${DOMAIN} \
@@ -325,7 +324,7 @@ bash <(curl -s ${REPO}/install_k8s_monitor.sh) \
 ### 一键部署 umami
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_umami.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_umami.sh) \
 --ingress_class higress \
 --umami_route_rule umami.${DOMAIN} \
 --password ${TOKEN}
@@ -334,7 +333,7 @@ bash <(curl -s ${REPO}/install_k8s_umami.sh) \
 ### 一键部署 cloud-ide(code-server)
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_ide.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_ide.sh) \
 --ingress_class higress \
 --coder_route_rule coder.${DOMAIN} \
 --password ${TOKEN}
@@ -344,7 +343,7 @@ bash <(curl -s ${REPO}/install_k8s_ide.sh) \
 ### 一键部署 waline
 
 ```bash
-bash <(curl -s ${REPO}/install_k8s_waline.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_waline.sh) \
 --ingress_class higress \
 --waline_route_rule waline.${DOMAIN} \
 --password ${TOKEN}
@@ -354,7 +353,7 @@ bash <(curl -s ${REPO}/install_k8s_waline.sh) \
 
 ```bash
 # provider: halo ghost drupal wordpress
-bash <(curl -s ${REPO}/install_k8s_webcms.sh) \
+bash <(curl -Ls ${REPO}/install_k8s_webcms.sh) \
 --ingress_class higress \
 --web_provider wordpress \
 --web_route_rule ${DOMAIN},www.${DOMAIN} \
@@ -365,7 +364,7 @@ bash <(curl -s ${REPO}/install_k8s_webcms.sh) \
 ### 一键部署 middleware
 
 ```bash
-bash <(curl -s ${REPO}/install_ms_middleware.sh) \
+bash <(curl -Ls ${REPO}/install_ms_middleware.sh) \
 --ingress_class higress \
 --dtm_route_rule dtm.${DOMAIN} \
 --password ${TOKEN}

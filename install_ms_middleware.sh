@@ -2,7 +2,7 @@
 
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
-source <(curl -s ${REPO}/env_k8sapp.sh) 
+source <(curl -Ls ${REPO}/env_k8sapp.sh) 
 else
 source ${REPO}/env_k8sapp.sh
 fi

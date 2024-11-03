@@ -3,7 +3,7 @@
 #############################################################
 # if [ -n "$(echo $REPO | grep ^http)" ]
 # then
-# source <(curl -s ${REPO}/env_function.sh) 
+# source <( ${REPO}/env_function.sh) 
 # else
 # source ${REPO}/env_function.sh
 # fi
@@ -30,6 +30,29 @@ export bitnami_image_repository=${bitnami_image_repository:-bitnami}
 
 
 export WORK_DIR=`pwd`
+
+GREEN="\033[0;32m"
+RED="\033[31m"
+YELLOW="\033[33m"
+RESET="\033[0m"
+
+INFO="[${GREEN}INFO${RESET}]"
+WARN="[${YELLOW}WARN${RESET}]"
+ERROR="[${RED}ERROR${RESET}]"
+function INFO() {
+    echo -e "${INFO} ${1}"
+}
+function WARN() {
+    echo -e "${WARN} ${1}"
+}
+function ERROR() {
+    echo -e "${ERROR} ${1}"
+}
+
+export -f INFO
+export -f WARN
+export -f ERROR
+
 
 getrelease(){
   if [ ! -n "$release" ]; then
@@ -102,7 +125,7 @@ run(){
   local online=$(echo $REPO | grep ^http)
   if [ -n "$online" ]
   then
-  bash <(curl -s ${REPO}/${script}) $@
+  bash <(curl -Ls ${REPO}/${script}) $@
   else
   bash ${REPO}/${script} $@
   fi
