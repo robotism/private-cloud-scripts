@@ -23,7 +23,6 @@ helm repo update
 
 helm upgrade --install \
 --namespace cattle-system --create-namespace \
---version 2.8.2 \
 --set replicas=1 \
 --set ingress.extraAnnotations."kubernetes\.io/ingress\.class"=${ingress_class} \
 --set hostname=${rancher_route_rule} \

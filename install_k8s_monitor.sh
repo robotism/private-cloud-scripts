@@ -139,11 +139,11 @@ git clone ${GHPROXY}https://github.com/apache/skywalking-helm
 cd skywalking-helm
 sed -i '1,31!d' chart/skywalking/Chart.yaml # remove dependences
 helm upgrade --install skywalking chart/skywalking  \
-  --version 4.6.0 \
+  --version 4.7.0 \
   --set ui.image.repository=docker.io/apache/skywalking-ui \
-  --set ui.image.tag=10.0.1 \
+  --set ui.image.tag=10.1.0 \
   --set oap.image.repository=docker.io/apache/skywalking-oap-server \
-  --set oap.image.tag=10.0.1 \
+  --set oap.image.tag=10.1.0 \
   --set oap.replicas=1 \
   --set elasticsearch.enabled=false \
   --set postgresql.enabled=false \
@@ -158,8 +158,6 @@ helm upgrade --install skywalking chart/skywalking  \
   --set elasticsearch.antiAffinity="" \
   --set elasticsearch.antiAffinityTopologyKey="" \
   --set satellite.enabled=false \
-  --set satellite.image.repository=docker.io/apache/skywalking-satellite \
-  --set satellite.image.tag=v1.2.0 \
   -n ${namespace} --create-namespace
 cd $WORK_DIR
 rm -rf skywalking-helm

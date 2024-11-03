@@ -41,7 +41,7 @@ install_k8s(){
   fi
   local k8s_image=${k8s_image:-"kubernetes"}
   if [ ! -n "`which kubectl 2>/dev/null`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.27.16 --masters ${masters:-""} -p ${password}
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.29.9 --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
@@ -53,7 +53,7 @@ install_k8s(){
 
 isntall_helm(){
   # https://github.com/labring-actions/cluster-image/blob/main/applications/helm
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/helm:v3.14.1
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/helm:v3.15.4
 }
 
 
@@ -68,8 +68,8 @@ install_helm_charts(){
 # https://github.com/kubernetes-sigs/gateway-api/releases
 install_gateway_api(){
   # Gateway API CRD 
-  # kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
-  kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/experimental-install.yaml
+  # kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.1/standard-install.yaml
+  kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.1/experimental-install.yaml
 }
 
 # c
@@ -78,7 +78,7 @@ install_cilium(){
   kubectl -n kube-system delete cm kube-proxy
   # Run on each node with root permissions:
   # iptables-save | grep -v KUBE | iptables-restore
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cilium:v1.15.5
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cilium:v1.16.1
 
   cilium status --wait
   cilium status 
@@ -180,7 +180,7 @@ install_istio(){
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/metrics-server
 install_metrics_server(){
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/metrics-server:v0.6.4
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/metrics-server:v0.7.1
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/kube-state-metrics
@@ -192,7 +192,7 @@ install_kube_state_metrics(){
 # https://github.com/labring-actions/cluster-image/blob/main/applications/ingress-nginx
 install_ingress_nginx(){
   local host=`getarg host $@`
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.9.4 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.11.2 \
   -e HELM_OPTS="--set controller.hostNetwork=${host:-true} --set controller.kind=DaemonSet --set controller.service.type=NodePort"
   # 使用宿主机网络, DaemonSet保证每个节点都可以接管流量, 使用NodePort暴露端口
   # 至此可以应用可以使用 ingressClass=ingress 暴露服务; 值得注意的是, 如果服务不可用,可能LoadBalancer不会分配ExternalIP
@@ -213,7 +213,7 @@ install_higress(){
   echo "istio=${istio:-true}"
   echo "gateway=${gateway:-true}"
 
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v1.4.1 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v2.0.1 \
   -e HELM_OPTS=" \
   --set global.local=${local:-true} \
   --set global.ingressClass=higress \

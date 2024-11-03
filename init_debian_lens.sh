@@ -6,7 +6,7 @@ DATA=${DATA:-/opt/data}
 # https://k8slens.dev/download
 if [ ! -f "${DATA}/Lens/Lens.AppImage" ]; then 
 mkdir -p ${DATA}/Lens
-wget -t 0 -c https://downloads.k8slens.dev/ide/Lens-2024.7.161041-latest.x86_64.AppImage -O ${DATA}/Lens/Lens.AppImage
+wget -t 0 -c https://downloads.k8slens.dev/ide/Lens-2024.10.171859-latest.x86_64.AppImage -O ${DATA}/Lens/Lens.AppImage
 chmod u+x  ${DATA}/Lens/Lens.AppImage
 fi
 
