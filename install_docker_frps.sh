@@ -82,6 +82,7 @@ docker run -dit \
   --privileged \
   --network=${network:-bridge} \
   -p ${port_bind}:${port_bind} \
+  -v ${datadir}/${FRPS_CONFIG}:/etc/frp/${FRPS_CONFIG} \
   -l traefik.enable=true \
   -l traefik.http.routers.${CONTAINER_NAME}-http.rule=${http_route_rule} \
   -l traefik.http.routers.${CONTAINER_NAME}-http.tls=${tls} \
