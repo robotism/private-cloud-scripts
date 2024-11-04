@@ -24,6 +24,7 @@ export TEMP=/opt/tmp
 export DATA=/opt/data
 
 # 代理
+export GHPROXY=https://gh.noproxy.top/
 export GHPROXY=https://gh-proxy.com/
 export GHPROXY=https://ghp.ci/
 

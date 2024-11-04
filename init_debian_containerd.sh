@@ -32,23 +32,7 @@ fi
 crmirrorhost1=${crmirrorhost1:-noproxy.top}
 crmirrorhost2=${crmirrorhost2:-kubesre.xyz}
 
-# [INFO] 别名仓库列表如下:
-# [INFO] 原仓库: cr.l5d.io 别名仓库:l5d.noproxy.top
-# [INFO] 原仓库: docker.elastic.co 别名仓库:elastic.noproxy.top
-# [INFO] 原仓库: docker.io 别名仓库:docker.noproxy.top
-# [INFO] 原仓库: gcr.io 别名仓库:gcr.noproxy.top
-# [INFO] 原仓库: ghcr.io 别名仓库:ghcr.noproxy.top
-# [INFO] 原仓库: k8s.gcr.io 别名仓库:k8s-gcr.noproxy.top
-# [INFO] 原仓库: registry.k8s.io 别名仓库:k8s.noproxy.top
-# [INFO] 原仓库: mcr.microsoft.com 别名仓库:mcr.noproxy.top
-# [INFO] 原仓库: nvcr.io 别名仓库:nvcr.noproxy.top
-# [INFO] 原仓库: quay.io 别名仓库:quay.noproxy.top
-# [INFO] 原仓库: registry.jujucharms.com 别名仓库:jujucharms.noproxy.top
-# [INFO] 原仓库: rocks.canonical.com 别名仓库:rocks-canonical.noproxy.top
-# [INFO]
-# [INFO] 代码仓库: https://github.com/kubesre/docker-registry-mirrors
-
-p0arams="${@:-\
+params="${@:-\
 cr.l5d.io:l5d.${crmirrorhost1},l5d.${crmirrorhost2} \
 docker.elastic.co:elastic.${crmirrorhost1},elastic.${crmirrorhost2} \
 docker.io:docker.${crmirrorhost1},docker.${crmirrorhost2} \
