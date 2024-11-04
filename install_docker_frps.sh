@@ -103,6 +103,7 @@ docker run -dit \
   -l traefik.http.routers.${CONTAINER_NAME}-ui.service=${CONTAINER_NAME}-ui@docker \
   -l traefik.http.services.${CONTAINER_NAME}-ui.loadbalancer.server.port=${port_ui} \
   --name=${CONTAINER_NAME} \
+  --entrypoint=frps \
   docker.io/snowdreamtech/frps:latest \
   -c /etc/frp/${FRPS_CONFIG}
 
