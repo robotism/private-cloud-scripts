@@ -103,7 +103,8 @@ docker run -dit \
   -l traefik.http.routers.${CONTAINER_NAME}-ui.service=${CONTAINER_NAME}-ui@docker \
   -l traefik.http.services.${CONTAINER_NAME}-ui.loadbalancer.server.port=${port_ui} \
   --name=${CONTAINER_NAME} \
-  docker.io/snowdreamtech/frps:latest
+  docker.io/snowdreamtech/frps:latest \
+  -c /etc/frp/${FRPS_CONFIG}
 
 docker ps -a | grep ${CONTAINER_NAME} 2>/dev/null
 docker logs -n 1000 ${CONTAINER_NAME} 2>/dev/null

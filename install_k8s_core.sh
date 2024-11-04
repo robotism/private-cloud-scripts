@@ -72,13 +72,12 @@ install_gateway_api(){
   kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.1/experimental-install.yaml
 }
 
-  # https://github.com/labring-actions/cluster-image/blob/main/applications/cilium
+# https://github.com/labring-actions/cluster-image/blob/main/applications/cilium
 install_cilium(){
   kubectl -n kube-system delete ds kube-proxy
   kubectl -n kube-system delete cm kube-proxy
   # Run on each node with root permissions:
   # iptables-save | grep -v KUBE | iptables-restore
-
   
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cilium:v1.16.1 \
     --env ExtraValues="kubeProxyReplacement=true,"
