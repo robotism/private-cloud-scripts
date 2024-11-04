@@ -90,7 +90,7 @@ install_cilium(){
 
 upgrade_cilium(){
   local version=`getarg version $@`
-  local version=${version:-v1.15.5}
+  local version=${version:-v1.16.1}
   local running=$(cilium version | grep running)
   local running=$(echo $running |awk -F '[ ]' '{print $NF}')
   local hubble=`getarg hubble $@`
