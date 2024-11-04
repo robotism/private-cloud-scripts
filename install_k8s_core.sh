@@ -78,8 +78,11 @@ install_cilium(){
   kubectl -n kube-system delete cm kube-proxy
   # Run on each node with root permissions:
   # iptables-save | grep -v KUBE | iptables-restore
+
+  
   sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cilium:v1.16.1 \
-    -e HELM_OPTS="--set bpf.masquerade=true --set kubeProxyReplacement=true --set ipam.mode=kubernetes "
+    --env ExtraValues="kubeProxyReplacement=true,"
+    # -e HELM_OPTS="--set bpf.masquerade=true --set kubeProxyReplacement=true --set ipam.mode=kubernetes "
 
   cilium status --wait
   cilium status 
