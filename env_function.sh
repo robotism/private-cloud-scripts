@@ -12,14 +12,6 @@
 [ "$debug" == "true" -o "$debug" == "yes" ] && set -x
 [ "$DEBUG" == "true" -o "$DEBUG" == "yes" ] && set -x
 
-if [ -n "`which yum 2>/dev/null`" ]; then
-export PM=yum
-fi
-
-if [ -n "`which apt 2>/dev/null`" ]; then
-export PM=apt
-fi
-
 export labring_image_registry=${LABRING_REPO}
 export labring_image_registry=${labring_image_registry:-registry.cn-shanghai.aliyuncs.com}
 export labring_image_repository=${labring_image_repository:-labring}

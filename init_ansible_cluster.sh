@@ -8,17 +8,13 @@ source ${REPO}/env_function.sh
 fi
 
 
-if [ ! -n "$PM" ]; then
-echo "missing apt/yum"
-exit
-fi
 
 if [ ! -n "`which sshpass 2>/dev/null`" ]; then
-eval $PM install -y sshpass
+eval apt install -y sshpass
 fi
 
 if [ ! -n "`which ansible 2>/dev/null`" ]; then
-eval $PM install -y ansible
+eval apt install -y ansible
 fi
 
 ips=`getarg ips $@`

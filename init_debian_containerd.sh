@@ -29,8 +29,8 @@ fi
 # https://github.com/kubesre/docker-registry-mirrors
 # crmirrorhost1=kubesre.xyz
 # crmirrorhost2=m.daocloud.io
-crmirrorhost1=${crmirrorhost1:-noproxy.top}
-crmirrorhost2=${crmirrorhost2:-kubesre.xyz}
+crmirrorhost1=${crmirrorhost1:-kubesre.xyz}
+crmirrorhost2=${crmirrorhost2:-noproxy.top}
 
 params="${@:-\
 cr.l5d.io:l5d.${crmirrorhost1},l5d.${crmirrorhost2} \
