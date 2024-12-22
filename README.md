@@ -91,17 +91,18 @@ ansible all -m raw -a "mkdir -p ${TEMP}"
 ansible all -m raw -a "mkdir -p ${DATA}"
 
 
-```
-
-### 一键初始化debian和docker环境
-
-```bash
-
 # 单独操作
 # bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}
 
 # 批量操作
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}"
+
+```
+
+### 一键初始化docker环境
+
+```bash
+
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_docker.sh)"
 
 # ansible all -m raw -a "sleep 3s && reboot"
@@ -252,7 +253,7 @@ bash <(curl -Ls ${REPO}/install_k8s_core.sh) \
 
 # 如果使用cointainer
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_containerd.sh) \
--- mirror1 noproxy.top
+-- mirror1 kubesre.xyz -- mirror2 noproxy.top
 "
 
 ```
