@@ -69,8 +69,9 @@ mirrors:
 EOF
 cat ${k3s_mirrors_config}
 
-systemctl restart k3s 2>/dev/null
-systemctl restart k3s-agent 2>/dev/null
+# systemctl restart k3s 2>/dev/null
+# systemctl restart k3s-agent 2>/dev/null
+
 
 
 # ansible all -m raw -a "mkdir -p /etc/rancher/k3s/"
