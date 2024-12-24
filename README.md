@@ -83,7 +83,7 @@ git config --global --unset https.proxy
 ```bash
 
 bash <(curl -Ls ${REPO}/init_ansible_cluster.sh) \
---hostname cloud-node- \
+--hostname cloud-node \
 --ips $CLOUD_IPS \
 --password ${CLOUD_SSH_PWD}
 

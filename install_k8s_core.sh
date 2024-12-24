@@ -18,8 +18,8 @@ cri_provider=${cri_provider:-containerd}
 install_sealos(){
   if [ ! -n "`which sealos 2>/dev/null`" ]; then
     echo "deb [trusted=yes] https://apt.fury.io/labring/ /" | sudo tee /etc/apt/sources.list.d/labring.list
-    sudo apt update
-    sudo apt install sealos --fix-missing
+    sudo apt update -y
+    sudo apt install -y sealos --fix-missing
   fi
 }
 
@@ -41,7 +41,7 @@ install_k8s(){
   fi
   local k8s_image=${k8s_image:-"kubernetes"}
   if [ ! -n "`which kubectl 2>/dev/null`" ]; then
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.29.9 --masters ${masters:-""} -p ${password}
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/${k8s_image}:v1.31.1 --masters ${masters:-""} -p ${password}
   fi
   if [ -n "$nodes" ]; then
   sealos add --nodes $nodes -p ${password}
@@ -53,7 +53,7 @@ install_k8s(){
 
   # https://github.com/labring-actions/cluster-image/blob/main/applications/helm
 isntall_helm(){
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/helm:v3.15.4
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/helm:v3.16.2
 }
 
 
@@ -68,8 +68,8 @@ install_helm_charts(){
 # https://github.com/kubernetes-sigs/gateway-api/releases
 install_gateway_api(){
   # Gateway API CRD 
-  # kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.1/standard-install.yaml
-  kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.1/experimental-install.yaml
+  # kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+  kubectl apply -f ${GHPROXY}https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/cilium
@@ -152,12 +152,12 @@ install_openebs(){
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/longhorn
 install_longhorn(){
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/longhorn:v1.6.1
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/longhorn:v1.7.2
 }
 
 # https://github.com/labring-actions/cluster-image/blob/main/applications/cert-manager
 install_cert_manager(){
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.15.0
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/cert-manager:v1.16.1
   kubectl -n cert-manager wait --for=condition=Ready pods --all
 }
 
@@ -195,7 +195,7 @@ install_kube_state_metrics(){
 # https://github.com/labring-actions/cluster-image/blob/main/applications/ingress-nginx
 install_ingress_nginx(){
   local host=`getarg host $@`
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.11.2 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/ingress-nginx:v1.11.3 \
   -e HELM_OPTS="--set controller.hostNetwork=${host:-true} --set controller.kind=DaemonSet --set controller.service.type=NodePort"
   # 使用宿主机网络, DaemonSet保证每个节点都可以接管流量, 使用NodePort暴露端口
   # 至此可以应用可以使用 ingressClass=ingress 暴露服务; 值得注意的是, 如果服务不可用,可能LoadBalancer不会分配ExternalIP
@@ -216,7 +216,7 @@ install_higress(){
   echo "istio=${istio:-true}"
   echo "gateway=${gateway:-true}"
 
-  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v2.0.1 \
+  sudo sealos run -f ${labring_image_registry}/${labring_image_repository}/higress:v2.0.3 \
   -e HELM_OPTS=" \
   --set global.local=${local:-true} \
   --set global.ingressClass=higress \
