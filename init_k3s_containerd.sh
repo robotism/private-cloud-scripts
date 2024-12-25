@@ -17,7 +17,8 @@ mkdir -p /etc/rancher/k3s/
 k3s_mirrors_config=${crmirrorfile:-"/etc/rancher/k3s/registries.yaml"}
 
 rm -rf ${k3s_mirrors_config}
-cat << EOF >> ${k3s_mirrors_config}configs:
+echo ${k3s_mirrors_config}
+cat << EOF >> ${k3s_mirrors_config}
 mirrors:
   cr.l5d.io:
     endpoint:
@@ -70,10 +71,11 @@ mirrors:
   sealos.hub:5000:
     endpoint:
       - "http://sealos.hub:5000"
-sealos.hub:5000:
-  auth:
-    username: admin
-    password: passw0rd
+configs:
+  sealos.hub:5000:
+    auth:
+      username: admin
+      password: passw0rd
 EOF
 cat ${k3s_mirrors_config}
 
