@@ -82,6 +82,9 @@ git config --global --unset https.proxy
 
 ```bash
 
+# 当前主机先初始化系统, 单独操作
+bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}
+
 bash <(curl -Ls ${REPO}/init_ansible_cluster.sh) \
 --hostname cloud-node \
 --ips $CLOUD_IPS \
@@ -90,9 +93,6 @@ bash <(curl -Ls ${REPO}/init_ansible_cluster.sh) \
 ansible all -m raw -a "mkdir -p ${TEMP}"
 ansible all -m raw -a "mkdir -p ${DATA}"
 
-
-# 单独操作
-# bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}
 
 # 批量操作
 ansible all -m raw -a "${ANSIBLE_VARS} bash <(curl -Ls ${REPO}/init_debian_system.sh) --profile ${PROFILE:-release}"
