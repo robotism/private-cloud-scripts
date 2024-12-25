@@ -6,6 +6,7 @@ else
 source ${REPO}/env_function.sh
 fi
 
+export crmirrorfile=`getarg registries $@`
 export crmirrorhost1=`getarg mirror1 $@`
 export crmirrorhost2=`getarg mirror2 $@`
 
@@ -13,10 +14,10 @@ DOMAIN1=${crmirrorhost1:-kubesre.xyz}
 DOMAIN2=${crmirrorhost2:-kubesre.xyz}
 
 mkdir -p /etc/rancher/k3s/
-k3s_mirrors_config="/etc/rancher/k3s/registries.yaml"
+k3s_mirrors_config=${crmirrorfile:-"/etc/rancher/k3s/registries.yaml"}
 
 rm -rf ${k3s_mirrors_config}
-cat << EOF >> ${k3s_mirrors_config}
+cat << EOF >> ${k3s_mirrors_config}configs:
 mirrors:
   cr.l5d.io:
     endpoint:
@@ -66,6 +67,13 @@ mirrors:
     endpoint:
       - quay://jujucharms.${DOMAIN1}
       - quay://jujucharms.${DOMAIN2}
+  sealos.hub:5000:
+    endpoint:
+      - "http://sealos.hub:5000"
+sealos.hub:5000:
+  auth:
+    username: admin
+    password: passw0rd
 EOF
 cat ${k3s_mirrors_config}
 
