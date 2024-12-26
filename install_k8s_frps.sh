@@ -15,6 +15,8 @@ mkdir -p $tmpdir
 namespace=$(getarg namespace $@)
 namespace=${namespace:-frp-system}
 
+kubectl create namespace $namespace 2>/dev/null
+
 token=$(getarg token $@)
 token=${token:-${TOKEN}}
 token=${token:-Pa44VV0rd14VVrOng}
@@ -106,25 +108,25 @@ spec:
     metadata:
       labels:
         app: frps
-        traefik.enable: true
-        traefik.http.routers.${CONTAINER_NAME}-http.rule: ${http_route_rule}
-        traefik.http.routers.${CONTAINER_NAME}-http.tls: ${tls}
-        traefik.http.routers.${CONTAINER_NAME}-http.entrypoints: ${entrypoints}
-        traefik.http.routers.${CONTAINER_NAME}-http.service: ${CONTAINER_NAME}-http@docker
-        traefik.http.services.${CONTAINER_NAME}-http.loadbalancer.server.port: ${port_http}
-        traefik.http.services.${CONTAINER_NAME}-http.loadBalancer.passHostHeader: true
-        traefik.http.middlewares.${CONTAINER_NAME}-http.headers.customrequestheaders.X-Forwarded-Proto: https
-        traefik.http.middlewares.${CONTAINER_NAME}-http.headers.contentSecurityPolicy: upgrade-insecure-requests
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.rule: ${tcp_route_rule}
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.tls: ${tls}
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.entrypoints: ${entrypoints}
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.service: ${CONTAINER_NAME}-tcp@docker
-        traefik.tcp.services.${CONTAINER_NAME}-tcp.loadbalancer.server.port: ${port_tcp}
-        traefik.http.routers.${CONTAINER_NAME}-ui.rule: ${dashboard_route_rule}
-        traefik.http.routers.${CONTAINER_NAME}-ui.tls: ${tls}
-        traefik.http.routers.${CONTAINER_NAME}-ui.entrypoints: ${entrypoints}
-        traefik.http.routers.${CONTAINER_NAME}-ui.service: ${CONTAINER_NAME}-ui@docker
-        traefik.http.services.${CONTAINER_NAME}-ui.loadbalancer.server.port: ${port_ui}
+        traefik.enable: "true"
+        traefik.http.routers.${CONTAINER_NAME}-http.rule: "${http_route_rule}"
+        traefik.http.routers.${CONTAINER_NAME}-http.tls: "${tls}"
+        traefik.http.routers.${CONTAINER_NAME}-http.entrypoints: "${entrypoints}"
+        traefik.http.routers.${CONTAINER_NAME}-http.service: "${CONTAINER_NAME}-http@docker"
+        traefik.http.services.${CONTAINER_NAME}-http.loadbalancer.server.port: "${port_http}"
+        traefik.http.services.${CONTAINER_NAME}-http.loadBalancer.passHostHeader: "true"
+        traefik.http.middlewares.${CONTAINER_NAME}-http.headers.customrequestheaders.X-Forwarded-Proto: "https"
+        traefik.http.middlewares.${CONTAINER_NAME}-http.headers.contentSecurityPolicy: "upgrade-insecure-requests"
+        traefik.tcp.routers.${CONTAINER_NAME}-tcp.rule: "${tcp_route_rule}"
+        traefik.tcp.routers.${CONTAINER_NAME}-tcp.tls: "${tls}"
+        traefik.tcp.routers.${CONTAINER_NAME}-tcp.entrypoints: "${entrypoints}"
+        traefik.tcp.routers.${CONTAINER_NAME}-tcp.service: "${CONTAINER_NAME}-tcp@docker"
+        traefik.tcp.services.${CONTAINER_NAME}-tcp.loadbalancer.server.port: "${port_tcp}"
+        traefik.http.routers.${CONTAINER_NAME}-ui.rule: "${dashboard_route_rule}"
+        traefik.http.routers.${CONTAINER_NAME}-ui.tls: "${tls}"
+        traefik.http.routers.${CONTAINER_NAME}-ui.entrypoints: "${entrypoints}"
+        traefik.http.routers.${CONTAINER_NAME}-ui.service: "${CONTAINER_NAME}-ui@docker"
+        traefik.http.services.${CONTAINER_NAME}-ui.loadbalancer.server.port: "${port_ui}"
     spec:
       containers:
         - name: frps
