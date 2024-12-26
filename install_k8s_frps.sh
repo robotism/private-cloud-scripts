@@ -87,7 +87,7 @@ cat ${tmpdir}/${FRPS_TOML}
 echo "------------------------------------------------------"
 
 kubectl delete secret ${FRPS_TOML} -n ${namespace} 2>/dev/null
-kubectl create secret generic ${FRPS_TOML} -n ${namespace} --from-file=${tmpdir}/${FRPS_YAML}
+kubectl create secret generic ${FRPS_TOML} -n ${namespace} --from-file=${tmpdir}/${FRPS_TOML}
 
 cat << EOF > ${tmpdir}/${FRPS_YAML}
 apiVersion: apps/v1
