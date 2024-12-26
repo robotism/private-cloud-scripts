@@ -1,4 +1,4 @@
-#/bin/bash -e
+#!/bin/bash -e
 
 if [ -n "$(echo $REPO | grep ^http)" ]
 then
