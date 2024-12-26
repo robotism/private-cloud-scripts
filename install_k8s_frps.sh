@@ -12,8 +12,16 @@ tmpdir=${tmpdir:-"$(pwd)"}
 tmpdir=${tmpdir}/.k8s_frps
 mkdir -p $tmpdir
 
-namespace=$(getarg namespace $@)
+namespace=`getarg namespace $@ 2>/dev/null`
 namespace=${namespace:-frp-system}
+password=`getarg password $@ 2>/dev/null`
+password=${password:-"Pa44VV0rd14VVrOng"}
+storage_class=`getarg storage_class $@  2>/dev/null`
+storage_class=${storage_class:-""}
+
+ingress_class=`getarg ingress_class $@ 2>/dev/null`
+ingress_class=${ingress_class:-higress}
+
 
 kubectl create namespace $namespace 2>/dev/null
 
@@ -22,8 +30,6 @@ token=${token:-${TOKEN}}
 token=${token:-Pa44VV0rd14VVrOng}
 
 
-dashboard_route_rule=`getarg dashboard_route_rule $@`
-dashboard_route_rule=${dashboard_route_rule:-'Host(`frps.localhost`)'}
 
 dashboard_user=`getarg dashboard_user $@`
 dashboard_user=${dashboard_user:-frps}
@@ -52,14 +58,6 @@ fi
 if [ "$tls" != "true" ]; then
 entrypoints=web
 fi
-
-
-http_route_rule=$(getarg http_route_rule $@)
-http_route_rule=${http_route_rule:-Host\(\`localhost\`\)}
-
-tcp_route_rule=$(getarg tcp_route_rule $@)
-tcp_route_rule=${tcp_route_rule:-HostSNI\(\`localhost\`\)}
-
 
 CONTAINER_NAME=frps
 
@@ -108,29 +106,19 @@ spec:
     metadata:
       labels:
         app: frps
-        traefik.enable: "true"
-        traefik.http.routers.${CONTAINER_NAME}-http.rule: "${http_route_rule}"
-        traefik.http.routers.${CONTAINER_NAME}-http.tls: "${tls}"
-        traefik.http.routers.${CONTAINER_NAME}-http.entrypoints: "${entrypoints}"
-        traefik.http.routers.${CONTAINER_NAME}-http.service: "${CONTAINER_NAME}-http@docker"
-        traefik.http.services.${CONTAINER_NAME}-http.loadbalancer.server.port: "${port_http}"
-        traefik.http.services.${CONTAINER_NAME}-http.loadBalancer.passHostHeader: "true"
-        traefik.http.middlewares.${CONTAINER_NAME}-http.headers.customrequestheaders.X-Forwarded-Proto: "https"
-        traefik.http.middlewares.${CONTAINER_NAME}-http.headers.contentSecurityPolicy: "upgrade-insecure-requests"
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.rule: "${tcp_route_rule}"
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.tls: "${tls}"
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.entrypoints: "${entrypoints}"
-        traefik.tcp.routers.${CONTAINER_NAME}-tcp.service: "${CONTAINER_NAME}-tcp@docker"
-        traefik.tcp.services.${CONTAINER_NAME}-tcp.loadbalancer.server.port: "${port_tcp}"
-        traefik.http.routers.${CONTAINER_NAME}-ui.rule: "${dashboard_route_rule}"
-        traefik.http.routers.${CONTAINER_NAME}-ui.tls: "${tls}"
-        traefik.http.routers.${CONTAINER_NAME}-ui.entrypoints: "${entrypoints}"
-        traefik.http.routers.${CONTAINER_NAME}-ui.service: "${CONTAINER_NAME}-ui@docker"
-        traefik.http.services.${CONTAINER_NAME}-ui.loadbalancer.server.port: "${port_ui}"
     spec:
       containers:
         - name: frps
           image: docker.io/snowdreamtech/frps:0.61
+          ports:
+            - name: bind
+              containerPort: ${port_bind}
+            - name: http
+              containerPort: ${port_http}
+            - name: tcp
+              containerPort: ${port_tcp}
+            - name: ui
+              containerPort: ${port_ui}
           volumeMounts:
             - name: config
               mountPath: "/etc/frp"
@@ -143,6 +131,85 @@ EOF
 
 kubectl delete -f ${tmpdir}/${FRPS_YAML} 2>/dev/null
 kubectl apply -f ${tmpdir}/${FRPS_YAML}
+
+
+echo "
+apiVersion: v1
+kind: Service
+metadata:
+  name: frps
+  namespace: ${namespace:-default}
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      name: bind
+      port: ${port_bind}
+      targetPort: ${port_bind}
+    - protocol: TCP
+      name: http
+      port: ${port_http}
+      targetPort: ${port_http}
+    - protocol: TCP
+      name: tcp
+      port: ${port_tcp}
+      targetPort: ${port_tcp}
+    - protocol: TCP
+      name: ui
+      port: ${port_ui}
+      targetPort: ${port_ui}
+  selector:
+    app: frps
+" | kubectl apply -f -
+
+
+bind_route_rule=$(getarg bind_route_rule $@)
+bind_route_rule=${bind_route_rule:-'frps.localhost'}
+
+dashboard_route_rule=`getarg dashboard_route_rule $@`
+dashboard_route_rule=${dashboard_route_rule:-'frps-ui.localhost'}
+
+http_route_rule=$(getarg http_route_rule $@)
+http_route_rule=${http_route_rule:-'frps-http-*.localhost'}
+
+tcp_route_rule=$(getarg tcp_route_rule $@)
+tcp_route_rule=${tcp_route_rule:-'frps-tcp-*localhost'}
+
+
+srv_name=$(kubectl get service -n ${namespace} | grep frps | awk '{print $1}')
+
+install_ingress_rule \
+--name frps-bind \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $port_bind \
+--domain ${bind_route_rule}
+
+install_ingress_rule \
+--name frps-ui \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $port_ui \
+--domain ${dashboard_route_rule}
+
+install_ingress_rule \
+--name frps-http \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $port_http \
+--domain ${http_route_rule}
+
+install_ingress_rule \
+--name frps-tcp \
+--namespace ${namespace} \
+--ingress_class ${ingress_class} \
+--service_name $srv_name \
+--service_port $port_tcp \
+--domain ${tcp_route_rule}
+
 
 rm -rf ${tmpdir}
 

@@ -128,15 +128,17 @@ export -f run
 install_ingress_rule(){
 local name=`getarg name $@`
 local namespace=`getarg namespace $@`
-local domains=`getarg domain $@`
 local ingress_class=`getarg ingress_class $@`
 local service_name=`getarg service_name $@`
 local service_port=`getarg service_port $@`
 local auth_type=`getarg auth_type $@`
 local auth_seacret=`getarg auth_secret $@`
 local auth_realm=`getarg auth_realm $@`
+local domains=`getarg domain $@`
 local domains=${domains:-${name}.localhost}
 local domains=$(echo $domains |  tr ',' ' ')
+local path_type=`getarg path_type $@`
+
 echo ">>>"
 echo ">>> install ingress domains: ${domains}"
 echo ">>>"
@@ -172,8 +174,8 @@ spec:
   - host: ${domain}
     http:
       paths:
-      - pathType: Prefix
-        path: "/"
+      - path: "/"
+        pathType: ${path_type:-ImplementationSpecific}
         backend:
           service:
             name: ${service_name:-${name}}
