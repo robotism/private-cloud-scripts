@@ -25,11 +25,37 @@ if [ ! -f "${DEBIAN_SOURCE}.old.bak" ]; then
   sudo \cp -rf ${DEBIAN_SOURCE} ${DEBIAN_SOURCE}.old.bak
   sudo cat ${DEBIAN_SOURCE}.old.bak
 fi
+if [ "$sources" = "restore" ]; then
+  sudo \cp -rf ${DEBIAN_SOURCE}.old.bak ${DEBIAN_SOURCE} 
+fi
+if [ "$sources" = "debian" ]; then
+  sudo \cp -rf ${DEBIAN_SOURCE}.old.bak ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.ustc.edu.cn/debian-security|security.debian.org/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.ustc.edu.cn|deb.debian.org|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.163.com/debian-security|security.debian.org/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.163.com|deb.debian.org|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.tencentyun.com/debian-security|security.debian.org/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.tencentyun.com|deb.debian.org|g" ${DEBIAN_SOURCE}
+  sudo cat ${DEBIAN_SOURCE}
+fi
 if [ "$sources" = "ustc" ]; then
   sudo \cp -rf ${DEBIAN_SOURCE}.old.bak ${DEBIAN_SOURCE}
-  sudo sed -i "s|deb.debian.org|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
   sudo sed -i 's|security.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|deb.debian.org|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.163.com/debian-security|mirrors.ustc.edu.cn/debian-security|g' ${DEBIAN_SOURCE}
   sudo sed -i "s|mirrors.163.com|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.tencentyun.com/debian-security|mirrors.ustc.edu.cn/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.tencentyun.com|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
+  sudo cat ${DEBIAN_SOURCE}
+fi
+if [ "$sources" = "tencent" ]; then
+  sudo \cp -rf ${DEBIAN_SOURCE}.old.bak ${DEBIAN_SOURCE}
+  sudo sed -i 's|security.debian.org/debian-security|mirrors.tencentyun.com|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|deb.debian.org|mirrors.tencentyun.com|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.163.com/debian-security|mirrors.tencentyun.com|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.163.com|mirrors.ustc.edu.cn|g" ${DEBIAN_SOURCE}
+  sudo sed -i 's|mirrors.ustc.edu.cn/debian-security|mirrors.tencentyun.com/debian-security|g' ${DEBIAN_SOURCE}
+  sudo sed -i "s|mirrors.ustc.edu.cn|mirrors.tencentyun.com|g" ${DEBIAN_SOURCE}
   sudo cat ${DEBIAN_SOURCE}
 fi
 
